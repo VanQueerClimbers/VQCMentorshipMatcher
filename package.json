@@ -10,6 +10,7 @@
     "test": "jest --watch"
   },
   "dependencies": {
+    "csv-parse": "^5.5.2",
     "next": "14.0.3",
     "react": "^18",
     "react-dom": "^18"

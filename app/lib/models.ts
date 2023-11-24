@@ -2,8 +2,14 @@ import { findMatching } from "./util";
 
 export enum CarpoolStyle {
   DRIVER = "driver",
-  PASSANGER = "passanger",
+  PASSENGER = "passanger",
   SOLO = "don't carpool",
+}
+
+export enum CoMentorStyle {
+  SOLO = "mentor solo",
+  COMENTOR = "co mentor",
+  EITHER = "either",
 }
 
 export class OtherResponse {
@@ -20,12 +26,12 @@ export class Person {
     public commutableGyms: string[] = [],
     public carpoolStyle: CarpoolStyle = CarpoolStyle.SOLO,
     public availability: string[] = [],
-    public desiredMenteeGroupSize: number = 3,
+    public groupSize: number = 3,
     public otherResponses: OtherResponse[] = []
   ) {};
 
   isPassenger(): boolean {
-    return this.carpoolStyle == CarpoolStyle.PASSANGER;
+    return this.carpoolStyle == CarpoolStyle.PASSENGER;
   }
 
   isDriver(): boolean {
@@ -47,8 +53,8 @@ export class Mentor extends Person {
     commutableGyms: string[] = [],
     carpoolStyle: CarpoolStyle = CarpoolStyle.SOLO,
     availability: string[] = [],
-    desiredMenteeGroup: number = 3,
-    public wantCoMentor: boolean = false
+    groupSize: number = 3,
+    public wantCoMentor: CoMentorStyle = CoMentorStyle.SOLO
   ) {
     super(
       name,
@@ -58,7 +64,7 @@ export class Mentor extends Person {
       commutableGyms,
       carpoolStyle,
       availability,
-      desiredMenteeGroup
+      groupSize
     );
   };
 }
@@ -67,7 +73,7 @@ export class Mentor extends Person {
 export class Group {
   constructor(
     public mentees: Person[] = [],
-    public mentors: Mentor[]= [],
+    public mentors: Mentor[] = [],
   ) {}
 }
 
