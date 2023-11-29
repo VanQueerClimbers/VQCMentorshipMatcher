@@ -93,8 +93,74 @@ describe("Deserializer", () => {
   describe("Mentees", () => {
     it("deserializes mentees correctly", () => {
       let deserializer = new Deserializer();
-      let results = deserializer.readMentors(MENTEES_CSV);
+      let results = deserializer.readMentees(MENTEES_CSV);
       expect(results.length).toEqual(2);
+
+      let m1 = results[0];
+      expect(m1.name).toEqual("Adam Ondra");
+      expect(m1.email).toEqual("flashesonly@climbhard.net");
+      expect(m1.pronouns).toEqual("send/train");
+      expect(m1.climbingStyles.length).toEqual(3);
+      expect(m1.climbingStyles).toEqual(expect.arrayContaining([
+        "boulderingadvanced",
+        "topropingadvanced",
+        "leadclimbingadvanced",
+      ]));
+      expect(m1.groupSize).toEqual(1);
+      expect(m1.commutableGyms.length).toEqual(6);
+      expect(m1.commutableGyms).toEqual(expect.arrayContaining([
+        "squamishcrags",
+        "coquitlambase5",
+        "northvancouvercrags",
+        "fraservalleycrags",
+        "northvancouverbase5",
+        "groundupsquamish",
+      ]));
+      expect(m1.carpoolStyle).toEqual(CarpoolStyle.SOLO);
+      expect(m1.availability.length).toEqual(6);
+      expect(m1.availability).toEqual(expect.arrayContaining([
+        "monday6am-9am",
+        "tuesday6am-9am",
+        "wednesday6am-9am",
+        "thursday6am-9am",
+        "friday6am-9am",
+        "saturday6am-9am",
+      ]));
+      expect(m1.otherResponses.length).toEqual(8);
+
+      let m2 = results[1];
+      expect(m2.name).toEqual("June (has no last name)");
+      expect(m2.email).toEqual("june@gmail.com");
+      expect(m2.pronouns).toEqual("it/its");
+      expect(m2.climbingStyles.length).toEqual(7);
+      expect(m2.climbingStyles).toEqual(expect.arrayContaining([
+        "boulderingbeginner",
+        "topropingbeginner",
+        "leadclimbingbeginner",
+        "anchorsystems",
+        "tradclimbing",
+        "multi-pitching",
+        "generaloutdoorsafety",
+      ]));
+      expect(m2.groupSize).toEqual(3);
+      expect(m2.commutableGyms.length).toEqual(5);
+      expect(m2.commutableGyms).toEqual(expect.arrayContaining([
+        "thehivevancouver",
+        "thehivenorthshore",
+        "thehivesurrey",
+        "thehiveportcoquitlam",
+        "projectclimbingcloverdale",
+      ]));
+      expect(m2.carpoolStyle).toEqual(CarpoolStyle.DRIVER);
+      expect(m2.availability.length).toEqual(5);
+      expect(m2.availability).toEqual(expect.arrayContaining([
+        "monday9am-1pm",
+        "wednesday1pm-5pm",
+        "thursday5pm-9pm",
+        "friday6am-9am",
+        "saturday9am-1pm",
+      ]));
+      expect(m2.otherResponses.length).toEqual(8);
     })
 
   });

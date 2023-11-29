@@ -27,10 +27,9 @@ export class MenteeCSVConfig {
     public nameKey: string = "first and last name",
     public emailKey: string = "contact email",
     public pronounsKey: string = "pronouns",
-    public climbingStylesKey: string = "styles and skills",
-    public wantCoMentorKey: string = "with a partner mentor",
-    public groupSizeKey: string = "how many people",
-    public commutableGymsKey: string = "comfortable commuting on your own",
+    public climbingStylesKey: string = "skills you would like to work on",
+    public groupSizeKey: string = "group size",
+    public commutableGymsKey: string = "comfortable commuting to on your own",
     public carpoolKey: string = "interested in carpooling",
 
     public mondayKey: string = "monday",
@@ -129,7 +128,56 @@ export class Deserializer {
   }
 
   readMentees(data: string): Person[] {
-    return [];
+    const records: any[] = parse(data, {columns: true, skip_empty_lines: true});
+    let mentees: Person[] = [];
+
+    records.forEach((r) => {
+      mentees.push(this.buildMentee(r));
+    });
+    return mentees;
+  }
+
+  buildMentee(r: any): Mentor {
+    let mentee = new Mentor("","","");
+
+    for (const key in r) {
+      let k = key.toLowerCase().trim();
+      if (k.includes(this.menteeConfig.nameKey)) {
+        mentee.name = r[key];
+      } else if (k.includes(this.menteeConfig.emailKey)) {
+        mentee.email = r[key];
+      } else if (k.includes(this.menteeConfig.pronounsKey)) {
+        mentee.pronouns = r[key];
+      } else if (k.includes(this.menteeConfig.climbingStylesKey)) {
+        mentee.climbingStyles = r[key].toLowerCase().replace(/(\s|\([^)]*\))/g, "").split(',');
+      } else if (k.includes(this.menteeConfig.groupSizeKey)) {
+        mentee.groupSize = parseInt(r[key]);
+      } else if (k.includes(this.menteeConfig.commutableGymsKey)) {
+        mentee.commutableGyms = r[key].toLowerCase().replace(/(\s|\([^)]*\))/g, "").split(',');
+      } else if (k.includes(this.menteeConfig.carpoolKey)) {
+        switch (r[key].toLowerCase().trim()) {
+          case "yes, i have a car":
+            mentee.carpoolStyle = CarpoolStyle.DRIVER;
+            break;
+          case "yes, i need a ride":
+            mentee.carpoolStyle = CarpoolStyle.PASSENGER;
+            break;
+          default:
+            mentee.carpoolStyle = CarpoolStyle.SOLO;
+            break;
+        }
+      } else if (!this.handleDate(mentee, key, r, this.menteeConfig.mondayKey) &&
+        !this.handleDate(mentee, key, r, this.menteeConfig.tuesdayKey) &&
+        !this.handleDate(mentee, key, r, this.menteeConfig.wednesdayKey) &&
+        !this.handleDate(mentee, key, r, this.menteeConfig.thursdayKey) &&
+        !this.handleDate(mentee, key, r, this.menteeConfig.fridayKey) &&
+        !this.handleDate(mentee, key, r, this.menteeConfig.saturdayKey) &&
+        !this.handleDate(mentee, key, r, this.menteeConfig.sundayKey)) {
+        mentee.otherResponses.push(new OtherResponse(key, r[key]));
+      }
+    }
+
+    return mentee;
   }
 }
 
