@@ -41,6 +41,16 @@ export class Person {
   isSolo(): boolean {
     return this.carpoolStyle == CarpoolStyle.SOLO;
   }
+
+  compatible(person: Person): boolean {
+    const carpoolCompatible = !this.isSolo() && !person.isSolo() && (
+      person.isDriver() || this.isDriver() );
+    const matchingStyles = findMatching(this.climbingStyles, person.climbingStyles).length > 0;
+    const matchingGyms = findMatching(this.commutableGyms, person.commutableGyms).length > 0;
+    const matchingAvail = findMatching(this.availability, person.availability).length > 0;
+
+    return matchingStyles && matchingAvail && ( matchingGyms || carpoolCompatible);
+  }
 }
 
 
@@ -67,6 +77,14 @@ export class Mentor extends Person {
       groupSize
     );
   };
+
+  isSoloMentor(): boolean {
+    return this.wantCoMentor == CoMentorStyle.SOLO;
+  }
+
+  compatible(mentor: Mentor): boolean {
+    return super.compatible(mentor) && !this.isSoloMentor() && !mentor.isSoloMentor();
+  }
 }
 
 
@@ -85,12 +103,16 @@ export class Team extends Group {
 
   styles(): string[] {
     let lists: string[][] = [];
+    let people = this.people();
 
-    this.people().forEach((m) => {
+    if (people.length == 1) return people[0].climbingStyles;
+
+    people.forEach((m) => {
       lists.push(m.climbingStyles);
     });
 
-    return findMatching(...lists);
+    if (lists.length > 1) return findMatching(...lists);
+    else return [];
   }
 
   commutableGyms(): string[] {
@@ -98,9 +120,11 @@ export class Team extends Group {
 
     let people = this.people();
 
+    if (people.length == 1) return people[0].commutableGyms;
+
     let drivers = people.filter( p => p.isDriver() );
 
-    this.people().forEach((m) => {
+    people.forEach((m) => {
       let gyms = m.commutableGyms;
       if (!m.isSolo()) {
         drivers.forEach( (d) => {
@@ -110,13 +134,14 @@ export class Team extends Group {
       lists.push(gyms);
     });
 
-    return findMatching(...lists);
+    if (lists.length > 1) return findMatching(...lists);
+    else return [];
   }
 
   carpoolGroup(): Person[] {
     let result: Person[] = [];
     this.people().forEach((m) => {
-      if (m.carpoolStyle != CarpoolStyle.SOLO) {
+      if (!m.isSolo()) {
         result.push(m);
       }
     });
@@ -125,11 +150,35 @@ export class Team extends Group {
 
   availability(): string[] {
     let lists: string[][] = [];
-
-    this.people().forEach((m) => {
+    let people = this.people();
+    if (people.length == 1) return people[0].availability;
+    people.forEach((m) => {
       lists.push(m.availability);
     });
 
-    return findMatching(...lists);
+    if (lists.length > 1) return findMatching(...lists);
+    else return [];
+  }
+
+  openSlots(): number {
+    let slots = 100;
+    this.mentors.forEach((mentor) => {
+      slots = Math.min(slots, mentor.groupSize);
+    });
+    this.mentees.forEach((mentee) => {
+      slots = Math.min(slots, mentee.groupSize);
+    });
+
+    return slots - this.mentees.length;
+  }
+
+  compatible(person: Person): boolean {
+    const carpoolCompatible = !person.isSolo() && this.people().filter(p => p.isDriver()).length > 0;
+    const matchingStyles = findMatching(this.styles(), person.climbingStyles).length > 0;
+    const matchingGyms = findMatching(this.commutableGyms(), person.commutableGyms).length > 0;
+    const matchingAvail = findMatching(this.availability(), person.availability).length > 0;
+    const groupSizeMatch = this.openSlots() > 0 && person.groupSize > this.mentees.length;
+
+    return matchingStyles && groupSizeMatch && matchingAvail && ( matchingGyms || carpoolCompatible );
   }
 }

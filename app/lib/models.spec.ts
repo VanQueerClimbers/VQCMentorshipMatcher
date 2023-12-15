@@ -1,7 +1,46 @@
 import {describe, expect, test} from '@jest/globals';
-import { CarpoolStyle, Person, Mentor, Group, Team } from "./models";
+import { CarpoolStyle, CoMentorStyle, Person, Mentor, Group, Team } from "./models";
 
 describe("Models", () => {
+
+  describe("Person", () => {
+    it("calculates compatibiliity no carpool", () => {
+      let p1 = new Person("name", "email", undefined, ["a", "b"], ["1","2"], undefined, [".", "..", "..."]);
+      let styles = new Person("name", "email", undefined, ["a", "b"], [], undefined, []);
+      let gyms = new Person("name", "email", undefined, [], ["1","2"], undefined, []);
+      let availability = new Person("name", "email", undefined, [], [], undefined, [".","..","..."]);
+      let compatible = new Person("name", "email", undefined, ["b"], ["2"], undefined, ["..."]);
+
+      expect(p1.compatible(styles)).toBeFalsy();
+      expect(p1.compatible(gyms)).toBeFalsy();
+      expect(p1.compatible(availability)).toBeFalsy();
+      expect(p1.compatible(compatible)).toBeTruthy();
+    });
+
+    it("calculates compatibiliity with carpool", () => {
+      let driver = new Person("name", "email", undefined, ["a", "b"], ["1","2"], CarpoolStyle.DRIVER, [".", "..", "..."]);
+      let passenger = new Person("name", "email", undefined, ["a", "b"], [], CarpoolStyle.PASSENGER, [".", "..", "..."]);
+      let solo_compatible = new Person("name", "email", undefined, ["a", "b"], ["1"], CarpoolStyle.SOLO, [".", "..", "..."]);
+      let solo_incompatible = new Person("name", "email", undefined, ["a", "b"], [], CarpoolStyle.SOLO, [".", "..", "..."]);
+
+      expect(driver.compatible(passenger)).toBeTruthy();
+      expect(driver.compatible(solo_compatible)).toBeTruthy();
+      expect(driver.compatible(solo_incompatible)).toBeFalsy();
+    });
+  });
+
+  describe("Mentor", () => {
+    it("calculates compatibiliity", () => {
+      let comentor = new Mentor("name", "email", undefined, ["b"], ["2"], undefined, ["..."], undefined, CoMentorStyle.COMENTOR);
+      let either = new Mentor("name", "email", undefined, ["b"], ["2"], undefined, ["..."], undefined, CoMentorStyle.EITHER);
+      let solo = new Mentor("name", "email", undefined, ["b"], ["2"], undefined, ["..."], undefined, CoMentorStyle.SOLO);
+
+      expect(comentor.compatible(either)).toBeTruthy();
+      expect(comentor.compatible(solo)).toBeFalsy();
+      expect(solo.compatible(either)).toBeFalsy();
+    });
+  });
+
 
   describe("Team", () => {
     it("calculates styles correctly", () => {
@@ -81,6 +120,43 @@ describe("Models", () => {
       let team = new Team([p1,p2,p3], [m1,m2]);
 
       expect(team.commutableGyms()).toEqual(expect.arrayContaining(["a", "c"]));
+    })
+
+    it("correctly calculates spaces in the team", () => {
+      let m1 = new Mentor("m1", "e", undefined, ["a"], ["a", "b"], CarpoolStyle.DRIVER, ["a", "b"], 3);
+      let m2 = new Mentor("m2", "e", undefined, ["a"], ["a", "b"], CarpoolStyle.DRIVER, ["a", "b"], 4);
+
+      let team = new Team([], [m1,m2]);
+      expect(team.openSlots()).toEqual(3);
+
+      team.mentees.push(new Person("p1", "e", undefined, ["a"], ["a", "c"], CarpoolStyle.SOLO, [], 2));
+      expect(team.openSlots()).toEqual(1);
+    })
+
+    it("correctly calculates compatibility", () => {
+      let m1 = new Mentor("m1", "e", undefined, ["a"], ["a", "b"], CarpoolStyle.DRIVER, ["a", "b"], 2);
+
+      let p1 = new Person("p1", "e", undefined, [], ["a", "b"], CarpoolStyle.SOLO, ["a", "b"]);
+      let p2 = new Person("p1", "e", undefined, ["a"], ["c"], CarpoolStyle.SOLO, ["a", "b"]);
+      let p3 = new Person("p1", "e", undefined, ["a"], ["a", "b"], CarpoolStyle.SOLO, ["c"]);
+      let p4 = new Person("p1", "e", undefined, ["a"], ["b"], CarpoolStyle.SOLO, ["a"]);
+
+      let team = new Team([], [m1]);
+
+      expect(team.compatible(p1)).toBeFalsy();
+      expect(team.compatible(p2)).toBeFalsy();
+      expect(team.compatible(p3)).toBeFalsy();
+      expect(team.compatible(p4)).toBeTruthy();
+    })
+
+    it("compatibility considers the new persons group size", () => {
+      let m1 = new Mentor("m1", "e", undefined, ["a"], ["a", "b"], CarpoolStyle.DRIVER, ["a", "b"], 2);
+      let p1 = new Person("p1", "e", undefined, ["a"], ["a", "b"], CarpoolStyle.SOLO, ["a", "b"]);
+      let team = new Team([p1], [m1]);
+
+      let p2 = new Person("p1", "e", undefined, ["a"], ["b"], CarpoolStyle.SOLO, ["a"], 1);
+
+      expect(team.compatible(p2)).toBeFalsy();
     })
 
   })
