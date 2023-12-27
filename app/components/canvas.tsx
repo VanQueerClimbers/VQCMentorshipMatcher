@@ -26,40 +26,84 @@ const Canvas: React.FC<ChildProps> = ( { isLoading, teams } ) => {
     children = renderTeams(teams);
   }
 
-  children = renderTeams([
-    new Team(
-      [
-        new Person(
-          "Mentee Venessa",
-          "venessa@venessa.com",
-          "she/her",
-          ["bouldering", "lead climbing", "top rope"],
-          ["hive north shore", "climbbase 5", "progression"],
-          CarpoolStyle.SOLO,
-          ["saturday", "monday", "tuesday"],
-          2,
-          [
-            new OtherResponse("question1?", "answer1"),
-            new OtherResponse("question2?", "answer2"),
-            new OtherResponse("question3?", "answer3"),
-          ]
-        ),
-        new Person("Mentee Morgan", "morgan@morgan.com", "they/he"),
-      ],
-      [
-        new Mentor("Mentor Michal", "michal@michal.com", "they/them"),
-        new Mentor("Mentor Juniper", "juni@juni.com", "she/her"),
-      ],
-    ),
-    new Team(
-      [
-        new Person("Mentee Jess", "jess@jess.com", "she/her"),
-      ],
-      [
-        new Mentor("Mentor Cherry", "cherry@cherry.com", "she/her"),
-      ],
-    ),
-  ]);
+  if (!isLoading && teams.length == 0) {
+    children = renderTeams([
+      new Team(
+        [
+          new Person(
+            "Mentee Venessa",
+            "venessa@venessa.com",
+            "she/her",
+            ["bouldering", "lead climbing", "top rope"],
+            ["hive north shore", "climbbase 5", "progression"],
+            CarpoolStyle.SOLO,
+            ["saturday", "monday", "tuesday"],
+            2,
+            [
+              new OtherResponse("question1?", "answer1"),
+              new OtherResponse("question2?", "answer2"),
+              new OtherResponse("question3?", "answer3"),
+            ]
+          ),
+          new Person(
+            "Mentee Morgan",
+            "morgan@morgan.com",
+            "they/he",
+            ["bouldering", "trad climbing", "top rope"],
+            ["hive north shore", "progression"],
+            CarpoolStyle.SOLO,
+            ["saturday", "thursday", "tuesday"],
+            2,
+            [
+              new OtherResponse("question1?", "answer1"),
+              new OtherResponse("question2?", "answer2"),
+              new OtherResponse("question3?", "answer3"),
+            ]
+          ),
+        ],
+        [
+          new Mentor(
+            "Mentor Michal",
+            "michal@michal.com",
+            "they/them",
+            ["bouldering", "trad climbing", "top rope"],
+            ["hive north shore", "progression"],
+            CarpoolStyle.SOLO,
+            ["saturday", "thursday", "tuesday"],
+            2,
+            [
+              new OtherResponse("question1?", "answer1"),
+              new OtherResponse("question2?", "answer2"),
+              new OtherResponse("question3?", "answer3"),
+            ]
+          ),
+          new Mentor(
+            "Mentor Juniper",
+            "juni@juni.com",
+            "she/her",
+            ["bouldering", "trad climbing", "top rope"],
+            ["hive north shore", "progression"],
+            CarpoolStyle.SOLO,
+            ["saturday", "thursday", "tuesday"],
+            2,
+            [
+              new OtherResponse("question1?", "answer1"),
+              new OtherResponse("question2?", "answer2"),
+              new OtherResponse("question3?", "answer3"),
+            ]
+          ),
+        ],
+      ),
+      new Team(
+        [
+          new Person("Mentee Jess", "jess@jess.com", "she/her"),
+        ],
+        [
+          new Mentor("Mentor Cherry", "cherry@cherry.com", "she/her"),
+        ],
+      ),
+    ]);
+  }
 
   return (
     <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
