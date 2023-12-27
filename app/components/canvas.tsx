@@ -1,7 +1,7 @@
 'use client';
 import TeamView from './teamview.tsx'
 import { React, useState } from 'react';
-import { Team, Person, Mentor } from '../lib/models'
+import { Team, Person, Mentor, OtherResponse, CarpoolStyle } from '../lib/models'
 
 interface ChildProps {
   isLoading: boolean;
@@ -29,7 +29,21 @@ const Canvas: React.FC<ChildProps> = ( { isLoading, teams } ) => {
   children = renderTeams([
     new Team(
       [
-        new Person("Mentee Venessa", "venessa@venessa.com", "she/her"),
+        new Person(
+          "Mentee Venessa",
+          "venessa@venessa.com",
+          "she/her",
+          ["bouldering", "lead climbing", "top rope"],
+          ["hive north shore", "climbbase 5", "progression"],
+          CarpoolStyle.SOLO,
+          ["saturday", "monday", "tuesday"],
+          2,
+          [
+            new OtherResponse("question1?", "answer1"),
+            new OtherResponse("question2?", "answer2"),
+            new OtherResponse("question3?", "answer3"),
+          ]
+        ),
         new Person("Mentee Morgan", "morgan@morgan.com", "they/he"),
       ],
       [
