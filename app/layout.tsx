@@ -1,7 +1,7 @@
 'use client';
 import { Inter } from 'next/font/google'
-import MenuBar from './menu.tsx'
-import Canvas from './canvas.tsx'
+import MenuBar from './components/menu.tsx'
+import Canvas from './components/canvas.tsx'
 import { useState } from 'react'
 import './globals.css'
 
@@ -11,6 +11,7 @@ import { buildTeams } from './lib/matcher'
 
 export default function RootLayout( { children, }: { children: ReactNode } )  {
   const [loading, setLoading] = useState(false);
+  const [teams, setTeams] = useState([]);
 
   const csvDataReceived = (menteeData: string, mentorData:string) => {
     setLoading(true);
@@ -22,13 +23,19 @@ export default function RootLayout( { children, }: { children: ReactNode } )  {
     );
     let teams = buildTeams(group);
     setLoading(false);
+    setTeams(teams);
   }
 
   return (
     <html lang="en">
+      <head>
+        <title>VQC Mentorship Matching</title>
+      </head>
       <body className="font-sans">
         <MenuBar submitCallback={csvDataReceived}/>
-        <Canvas isLoading={loading}/>
+        <div className="h-screen w-screen">
+          <Canvas isLoading={loading} teams={teams}/>
+        </div>
       </body>
     </html>
   )
