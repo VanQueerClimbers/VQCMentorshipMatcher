@@ -5,11 +5,11 @@ describe("Models", () => {
 
   describe("Person", () => {
     it("calculates compatibiliity no carpool", () => {
-      let p1 = new Person("name", "email", undefined, ["a", "b"], ["1","2"], undefined, [".", "..", "..."]);
-      let styles = new Person("name", "email", undefined, ["a", "b"], [], undefined, []);
-      let gyms = new Person("name", "email", undefined, [], ["1","2"], undefined, []);
-      let availability = new Person("name", "email", undefined, [], [], undefined, [".","..","..."]);
-      let compatible = new Person("name", "email", undefined, ["b"], ["2"], undefined, ["..."]);
+      let p1 = new Person("name", "email1", undefined, ["a", "b"], ["1","2"], undefined, [".", "..", "..."]);
+      let styles = new Person("name", "email2", undefined, ["a", "b"], [], undefined, []);
+      let gyms = new Person("name", "email3", undefined, [], ["1","2"], undefined, []);
+      let availability = new Person("name", "email4", undefined, [], [], undefined, [".","..","..."]);
+      let compatible = new Person("name", "email5", undefined, ["b"], ["2"], undefined, ["..."]);
 
       expect(p1.compatible(styles)).toBeFalsy();
       expect(p1.compatible(gyms)).toBeFalsy();
@@ -18,10 +18,10 @@ describe("Models", () => {
     });
 
     it("calculates compatibiliity with carpool", () => {
-      let driver = new Person("name", "email", undefined, ["a", "b"], ["1","2"], CarpoolStyle.DRIVER, [".", "..", "..."]);
-      let passenger = new Person("name", "email", undefined, ["a", "b"], [], CarpoolStyle.PASSENGER, [".", "..", "..."]);
-      let solo_compatible = new Person("name", "email", undefined, ["a", "b"], ["1"], CarpoolStyle.SOLO, [".", "..", "..."]);
-      let solo_incompatible = new Person("name", "email", undefined, ["a", "b"], [], CarpoolStyle.SOLO, [".", "..", "..."]);
+      let driver = new Person("name", "email1", undefined, ["a", "b"], ["1","2"], CarpoolStyle.DRIVER, [".", "..", "..."]);
+      let passenger = new Person("name", "email2", undefined, ["a", "b"], [], CarpoolStyle.PASSENGER, [".", "..", "..."]);
+      let solo_compatible = new Person("name", "email3", undefined, ["a", "b"], ["1"], CarpoolStyle.SOLO, [".", "..", "..."]);
+      let solo_incompatible = new Person("name", "email4", undefined, ["a", "b"], [], CarpoolStyle.SOLO, [".", "..", "..."]);
 
       expect(driver.compatible(passenger)).toBeTruthy();
       expect(driver.compatible(solo_compatible)).toBeTruthy();
@@ -31,9 +31,9 @@ describe("Models", () => {
 
   describe("Mentor", () => {
     it("calculates compatibiliity", () => {
-      let comentor = new Mentor("name", "email", undefined, ["b"], ["2"], undefined, ["..."], undefined, CoMentorStyle.COMENTOR);
-      let either = new Mentor("name", "email", undefined, ["b"], ["2"], undefined, ["..."], undefined, CoMentorStyle.EITHER);
-      let solo = new Mentor("name", "email", undefined, ["b"], ["2"], undefined, ["..."], undefined, CoMentorStyle.SOLO);
+      let comentor = new Mentor("name", "email1", undefined, ["b"], ["2"], undefined, ["..."], undefined, CoMentorStyle.COMENTOR);
+      let either = new Mentor("name", "email2", undefined, ["b"], ["2"], undefined, ["..."], undefined, CoMentorStyle.EITHER);
+      let solo = new Mentor("name", "email3", undefined, ["b"], ["2"], undefined, ["..."], undefined, CoMentorStyle.SOLO);
 
       expect(comentor.compatible(either)).toBeTruthy();
       expect(comentor.compatible(solo)).toBeFalsy();
@@ -44,11 +44,11 @@ describe("Models", () => {
 
   describe("Team", () => {
     it("calculates styles correctly", () => {
-      let p1 = new Person("p1", "e", undefined, ["a", "b", "c"]);
-      let p2 = new Person("p2", "e", undefined, ["b", "c", "d"]);
-      let p3 = new Person("p3", "e", undefined, ["b", "c", "f"]);
+      let p1 = new Person("p1", "a", undefined, ["a", "b", "c"]);
+      let p2 = new Person("p2", "b", undefined, ["b", "c", "d"]);
+      let p3 = new Person("p3", "c", undefined, ["b", "c", "f"]);
 
-      let m1 = new Mentor("m1", "e", undefined, ["b", "c"]);
+      let m1 = new Mentor("m1", "d", undefined, ["b", "c"]);
       let m2 = new Mentor("m2", "e", undefined, ["b", "c", "a"]);
 
       let team = new Team([p1,p2,p3], [m1,m2]);
@@ -110,9 +110,9 @@ describe("Models", () => {
     })
 
     it("supports gyms based on multiple drivers", () => {
-      let p1 = new Person("p1", "e", undefined, undefined, ["a", "c"], CarpoolStyle.SOLO);
-      let p2 = new Person("p2", "e", undefined, undefined, ["a"], CarpoolStyle.DRIVER);
-      let p3 = new Person("p3", "e", undefined, undefined, ["b", "c"], CarpoolStyle.PASSENGER);
+      let p1 = new Person("p1", "a", undefined, undefined, ["a", "c"], CarpoolStyle.SOLO);
+      let p2 = new Person("p2", "b", undefined, undefined, ["a"], CarpoolStyle.DRIVER);
+      let p3 = new Person("p3", "c", undefined, undefined, ["b", "c"], CarpoolStyle.PASSENGER);
 
       let m1 = new Mentor("m1", "e", undefined, undefined, ["a", "c"], CarpoolStyle.DRIVER);
       let m2 = new Mentor("m2", "e", undefined, undefined, ["a", "c"]);
@@ -123,8 +123,8 @@ describe("Models", () => {
     })
 
     it("correctly calculates spaces in the team", () => {
-      let m1 = new Mentor("m1", "e", undefined, ["a"], ["a", "b"], CarpoolStyle.DRIVER, ["a", "b"], 3);
-      let m2 = new Mentor("m2", "e", undefined, ["a"], ["a", "b"], CarpoolStyle.DRIVER, ["a", "b"], 4);
+      let m1 = new Mentor("m1", "a", undefined, ["a"], ["a", "b"], CarpoolStyle.DRIVER, ["a", "b"], 3);
+      let m2 = new Mentor("m2", "b", undefined, ["a"], ["a", "b"], CarpoolStyle.DRIVER, ["a", "b"], 4);
 
       let team = new Team([], [m1,m2]);
       expect(team.openSlots()).toEqual(3);
@@ -134,11 +134,11 @@ describe("Models", () => {
     })
 
     it("correctly calculates compatibility", () => {
-      let m1 = new Mentor("m1", "e", undefined, ["a"], ["a", "b"], CarpoolStyle.DRIVER, ["a", "b"], 2);
+      let m1 = new Mentor("m1", "a", undefined, ["a"], ["a", "b"], CarpoolStyle.DRIVER, ["a", "b"], 2);
 
-      let p1 = new Person("p1", "e", undefined, [], ["a", "b"], CarpoolStyle.SOLO, ["a", "b"]);
-      let p2 = new Person("p1", "e", undefined, ["a"], ["c"], CarpoolStyle.SOLO, ["a", "b"]);
-      let p3 = new Person("p1", "e", undefined, ["a"], ["a", "b"], CarpoolStyle.SOLO, ["c"]);
+      let p1 = new Person("p1", "b", undefined, [], ["a", "b"], CarpoolStyle.SOLO, ["a", "b"]);
+      let p2 = new Person("p1", "c", undefined, ["a"], ["c"], CarpoolStyle.SOLO, ["a", "b"]);
+      let p3 = new Person("p1", "d", undefined, ["a"], ["a", "b"], CarpoolStyle.SOLO, ["c"]);
       let p4 = new Person("p1", "e", undefined, ["a"], ["b"], CarpoolStyle.SOLO, ["a"]);
 
       let team = new Team([], [m1]);
@@ -151,11 +151,21 @@ describe("Models", () => {
 
     it("compatibility considers the new persons group size", () => {
       let m1 = new Mentor("m1", "e", undefined, ["a"], ["a", "b"], CarpoolStyle.DRIVER, ["a", "b"], 2);
-      let p1 = new Person("p1", "e", undefined, ["a"], ["a", "b"], CarpoolStyle.SOLO, ["a", "b"]);
+      let p1 = new Person("p1", "f", undefined, ["a"], ["a", "b"], CarpoolStyle.SOLO, ["a", "b"]);
       let team = new Team([p1], [m1]);
 
-      let p2 = new Person("p1", "e", undefined, ["a"], ["b"], CarpoolStyle.SOLO, ["a"], 1);
+      let p2 = new Person("p1", "g", undefined, ["a"], ["b"], CarpoolStyle.SOLO, ["a"], 1);
 
+      expect(team.compatible(p2)).toBeFalsy();
+    })
+
+    // some people sign up to be both mentors and mentees. We don't want to
+    // match them with themselves
+    it("compatibility does not allow members with same email address", () => {
+      let m1 = new Mentor("m1", "e", undefined, ["a"], ["b"], CarpoolStyle.DRIVER, ["a"]);
+      let team = new Team([], [m1]);
+
+      let p2 = new Person("p1", "e", undefined, ["a"], ["b"], CarpoolStyle.SOLO, ["a"]);
       expect(team.compatible(p2)).toBeFalsy();
     })
 

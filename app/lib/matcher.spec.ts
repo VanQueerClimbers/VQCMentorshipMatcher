@@ -6,7 +6,7 @@ describe("Matcher", () => {
   function createDefaultMentor(name: string): Mentor {
     return new Mentor(
       name,
-      "email",
+      "email"+name,
       "pronouns",
       ["1","2","3"],
       ["a","b","c"],
@@ -140,7 +140,7 @@ describe("Matcher", () => {
     function createDefaultPerson(name: string): Person {
       return new Person(
         name,
-        "email",
+        "email"+name,
         "pronouns",
         ["1","2","3"],
         ["a","b","c"],
@@ -225,22 +225,22 @@ describe("Matcher", () => {
       m.commutableGyms = ["e"];
       group.mentors.push(m);
 
-      let p = createDefaultPerson("a");
+      let p = createDefaultPerson("ap");
       p.availability = ["a"];
       p.commutableGyms = ["a"];
       group.mentees.push(p);
 
-      p = createDefaultPerson("b");
+      p = createDefaultPerson("bp");
       p.availability = ["b"];
       p.commutableGyms = ["b"];
       group.mentees.push(p);
 
-      p = createDefaultPerson("c");
+      p = createDefaultPerson("cp");
       p.availability = ["c"];
       p.commutableGyms = ["c"];
       group.mentees.push(p);
 
-      p = createDefaultPerson("f");
+      p = createDefaultPerson("fp");
       p.availability = ["f"];
       p.commutableGyms = ["f"];
       group.mentees.push(p);
@@ -252,19 +252,19 @@ describe("Matcher", () => {
       expect(t1.mentors.length).toEqual(1);
       expect(t1.mentors[0].name).toEqual("a");
       expect(t1.mentees.length).toEqual(1);
-      expect(t1.mentees[0].name).toEqual("a");
+      expect(t1.mentees[0].name).toEqual("ap");
 
       let t2 = teams[1];
       expect(t2.mentors.length).toEqual(1);
       expect(t2.mentors[0].name).toEqual("b");
       expect(t2.mentees.length).toEqual(1);
-      expect(t2.mentees[0].name).toEqual("b");
+      expect(t2.mentees[0].name).toEqual("bp");
 
       let t4 = teams[3];
       expect(t4.mentors.length).toEqual(0);
       expect(t4.mentees.length).toEqual(2);
-      expect(t4.mentees[0].name).toEqual("f");
-      expect(t4.mentees[1].name).toEqual("c");
+      expect(t4.mentees[0].name).toEqual("fp");
+      expect(t4.mentees[1].name).toEqual("cp");
     });
   });
 });

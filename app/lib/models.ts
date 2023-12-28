@@ -48,8 +48,9 @@ export class Person {
     const matchingStyles = findMatching(this.climbingStyles, person.climbingStyles).length > 0;
     const matchingGyms = findMatching(this.commutableGyms, person.commutableGyms).length > 0;
     const matchingAvail = findMatching(this.availability, person.availability).length > 0;
+    const differentEmail = this.email != person.email;
 
-    return matchingStyles && matchingAvail && ( matchingGyms || carpoolCompatible);
+    return matchingStyles && matchingAvail && ( matchingGyms || carpoolCompatible) && differentEmail;
   }
 }
 
@@ -179,6 +180,9 @@ export class Team extends Group {
     const matchingAvail = findMatching(this.availability(), person.availability).length > 0;
     const groupSizeMatch = this.openSlots() > 0 && person.groupSize > this.mentees.length;
 
-    return matchingStyles && groupSizeMatch && matchingAvail && ( matchingGyms || carpoolCompatible );
+    const uniqueEmails = this.people().filter(p => p.email == person.email).length == 0;
+
+
+    return matchingStyles && groupSizeMatch && matchingAvail && ( matchingGyms || carpoolCompatible ) && uniqueEmails;
   }
 }
