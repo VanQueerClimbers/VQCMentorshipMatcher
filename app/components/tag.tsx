@@ -5,7 +5,7 @@ interface TagProps {
   text: string;
 }
 
-const Tag: React.FC<TagProps> = ( { text } ) => {
+const Tag: React.FC<TagProps> = ( { text, children } ) => {
   const hash = crypto.createHash('md5').update(text).digest('hex');
 
   const darkFactor = 200;
@@ -22,7 +22,7 @@ const Tag: React.FC<TagProps> = ( { text } ) => {
       className="text-xs font-bold bg-pink-600 border-pink-700 p-1 border-2 border-solid text-white rounded-lg"
       style={style}
       >
-      {text}
+      {text}{children}
     </span>
   )
 };

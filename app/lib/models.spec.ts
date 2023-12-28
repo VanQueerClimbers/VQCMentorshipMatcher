@@ -119,6 +119,8 @@ describe("Models", () => {
 
       let team = new Team([p1,p2,p3], [m1,m2]);
 
+      expect(team.nonCarpoolGyms().length).toEqual(0);
+      expect(team.carpoolGyms()).toEqual(expect.arrayContaining(["a", "c"]));
       expect(team.commutableGyms()).toEqual(expect.arrayContaining(["a", "c"]));
     })
 

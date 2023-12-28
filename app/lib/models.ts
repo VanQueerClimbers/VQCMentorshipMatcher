@@ -116,6 +116,18 @@ export class Team extends Group {
     else return [];
   }
 
+  nonCarpoolGyms(): string[] {
+    let lists: string[][] = [];
+    this.people().forEach((m) => lists.push(m.commutableGyms));
+    if (lists.length > 1) return findMatching(...lists);
+    else return [];
+  }
+
+  carpoolGyms(): string[] {
+    let nonCarpoolGyms = this.nonCarpoolGyms();
+    return this.commutableGyms().filter( (cg) => !nonCarpoolGyms.includes(cg));
+  }
+
   commutableGyms(): string[] {
     let lists: string[][] = [];
 

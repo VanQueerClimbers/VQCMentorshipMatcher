@@ -36,7 +36,7 @@ const Canvas: React.FC<ChildProps> = ( { isLoading, teams } ) => {
             "she/her",
             ["bouldering", "lead climbing", "top rope"],
             ["hive north shore", "climbbase 5", "progression"],
-            CarpoolStyle.SOLO,
+            CarpoolStyle.DRIVER,
             ["saturday", "monday", "tuesday"],
             2,
             [
@@ -51,7 +51,7 @@ const Canvas: React.FC<ChildProps> = ( { isLoading, teams } ) => {
             "they/he",
             ["bouldering", "trad climbing", "top rope"],
             ["hive north shore", "progression"],
-            CarpoolStyle.SOLO,
+            CarpoolStyle.DRIVER,
             ["saturday", "thursday", "tuesday"],
             2,
             [
@@ -67,7 +67,7 @@ const Canvas: React.FC<ChildProps> = ( { isLoading, teams } ) => {
             "michal@michal.com",
             "they/them",
             ["bouldering", "trad climbing", "top rope"],
-            ["hive north shore", "progression"],
+            ["hive north shore", "climbbase 5", "progression"],
             CarpoolStyle.SOLO,
             ["saturday", "thursday", "tuesday"],
             2,
@@ -83,7 +83,7 @@ const Canvas: React.FC<ChildProps> = ( { isLoading, teams } ) => {
             "she/her",
             ["bouldering", "trad climbing", "top rope"],
             ["hive north shore", "progression"],
-            CarpoolStyle.SOLO,
+            CarpoolStyle.PASSENGER,
             ["saturday", "thursday", "tuesday"],
             2,
             [
