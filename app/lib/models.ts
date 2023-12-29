@@ -105,6 +105,10 @@ export class Group {
 
 export class Team extends Group {
 
+  uniqueId(): number {
+    return this.people().map( (p, i) => 10^i * p.uniqueId ).reduce( (a, v) => a+v );
+  }
+
   people(): Person[] {
     return this.mentees.concat(this.mentors);
   }

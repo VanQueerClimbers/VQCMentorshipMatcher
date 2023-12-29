@@ -1,7 +1,8 @@
 'use client';
-import { React, useState } from 'react';
+import { React, useState, useRef } from 'react';
 
-const MenuBar = ( { submitCallback } ) => {
+const MenuBar = ( { submitCallback, loadCallback, saveCallback } ) => {
+  const loadInputRef = useRef(null);
   const [mentorData, setMentorData] = useState("");
   const [menteeData, setMenteeData] = useState("");
 
@@ -38,8 +39,41 @@ const MenuBar = ( { submitCallback } ) => {
     }
   };
 
+  const stateFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        loadCallback(e.target?.result as string);
+      };
+      reader.readAsText(file);
+    }
+  };
+
+  const loadItem = () => {
+    loadInputRef.current.click();
+  };
+
   return (
-      <form className="flex bg-slate-400">
+    <div className="flex bg-slate-400">
+      <button
+        className="flex-none bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-2"
+        onClick={saveCallback}>
+        Save
+      </button>
+      <input
+        type="file"
+        ref={loadInputRef}
+        style={{ display: 'none' }}
+        accept=".vqc"
+        onChange={stateFileChange}/>
+      <button
+        className="flex-none bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-2"
+        onClick={loadItem}>
+        Load
+      </button>
+      <form className="flex flex-auto">
         <div className="flex-auto flex py-1 px-2">
           <div className="flex-none">Mentee CSV:</div>
           <input
@@ -65,10 +99,11 @@ const MenuBar = ( { submitCallback } ) => {
         <input
           type="submit"
           value="Match"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2"
+          className="flex-none bg-blue-500 hover:bg-blue-600 text-white py-1 px-2"
           onClick={submitPressed}
           />
       </form>
+    </div>
   )
 };
 
