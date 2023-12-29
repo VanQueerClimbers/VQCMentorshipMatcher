@@ -1,30 +1,35 @@
 'use client';
-import { Person } from '../lib/models'
+import { useState, useRef } from 'react'
+import { useDrag } from "react-dnd";
+import { Person, Mentor, Team } from '../lib/models'
 import Modal from './modal.tsx'
 import Tag from './tag.tsx'
-import { useState } from 'react'
 
-interface ChildProps {
-  person: Person;
-}
-
-const PersonView: React.FC<ChildProps> = ( { person } ) => {
+const PersonView = ( { person, team, onMoved, ghost = false } ) => {
   const [openModal, setOpenModal] = useState(false);
 
+  const openPersonDetails = () => { setOpenModal(true); };
+  const closePersonDetails = () => { setOpenModal(false); };
 
-  const openPersonDetails = () => {
-    setOpenModal(true);
-  };
+  const isMentor = person instanceof Mentor;
 
-  const closePersonDetails = () => {
-    setOpenModal(false);
-  };
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: isMentor ? "Mentor" : "Person",
+    item: { person, team, onMoved },
+    collect: (monitor) => {
+      return {
+        isDragging: monitor.isDragging(),
+      };
+    },
+  }));
 
   return (
     <div>
       <div
-        className="bg-purple-400 border-2 border-purple-900 border-solid rounded-lg flex flex-wrap text-sm m-1 divide-purple-900 divide-x divide-solid hover:bg-purple-600 hover:cursor-pointer hover:text-white"
+        className="border-2 border-black border-solid rounded-lg flex flex-wrap text-sm m-1 hover:bg-purple-600 hover:cursor-pointer hover:border-white"
+        style={ {backgroundColor: isMentor ? "#fef08a" : "#d9f99d", opacity: ghost ? 0.3 : 1.0} }
         onClick={openPersonDetails}
+        ref={ghost ? null : drag}
         >
         <Tag text={person.pronouns} className="flex-none"/>
         <h2 className="flex-auto p-1">{person.name}</h2>

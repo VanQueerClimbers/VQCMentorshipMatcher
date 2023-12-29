@@ -1,11 +1,7 @@
 'use client';
 import * as crypto from 'crypto'
 
-interface TagProps {
-  text: string;
-}
-
-const Tag: React.FC<TagProps> = ( { text, children } ) => {
+const Tag = ( { text, children } ) => {
   const hash = crypto.createHash('md5').update(text).digest('hex');
 
   const darkFactor = 200;

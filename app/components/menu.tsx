@@ -1,11 +1,7 @@
 'use client';
 import { React, useState } from 'react';
 
-interface ChildProps {
-  submitCallback: (mentorData:string, menteeData:string) => void;
-}
-
-const MenuBar: React.FC<ChildProps> = ( { submitCallback } ) => {
+const MenuBar = ( { submitCallback } ) => {
   const [mentorData, setMentorData] = useState("");
   const [menteeData, setMenteeData] = useState("");
 

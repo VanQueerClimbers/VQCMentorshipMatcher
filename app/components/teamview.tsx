@@ -1,44 +1,105 @@
 'use client';
-import { React, useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCar } from '@fortawesome/free-solid-svg-icons';
+import { useDrop } from "react-dnd";
+import * as _ from 'lodash'
 import { Team } from '../lib/models'
 import PersonView from './personview.tsx'
 import Tag from './tag.tsx'
 import Modal from './modal.tsx'
 
-interface ChildProps {
-  team: Team;
-}
-
-const TeamView: React.FC<ChildProps> = ( { team } ) => {
+const TeamView = ( { team } ) => {
+  const [mentors, setLocalMentors] = useState([...team.mentors]);
+  const [mentees, setLocalMentees] = useState([...team.mentees]);
   const [openModal, setOpenModal] = useState(false);
+  const [mentorShadow, setMentorShadow] = useState(null);
+  const [menteeShadow, setMenteeShadow] = useState(null);
 
-  const openTeamDetails = () => {
-    setOpenModal(true);
+  const openTeamDetails = () => { setOpenModal(true); };
+  const closeTeamDetails = () => { setOpenModal(false); };
+
+
+  const updateMentors = (newMentors: Person[]) => {
+    team.mentors = [...newMentors];
+    setLocalMentors(newMentors);
   };
 
-  const closeTeamDetails = () => {
-    setOpenModal(false);
+  const updateMentees = (newMentees: Person[]) => {
+    team.mentees = [...newMentees];
+    setLocalMentees(newMentees);
   };
+
+  const onMentorMoved = (person: Person) => {
+    updateMentors(team.mentors.filter( (m) => m.uniqueId != person.uniqueId ));
+  };
+  const onMenteeMoved = (person: Person) => {
+    updateMentees(team.mentees.filter( (m) => m.uniqueId != person.uniqueId ));
+  };
+
+  const [{isOverMentor}, mentorDrop] = useDrop({
+    accept: "Mentor",
+    hover(item) {
+      if (item.team === team) { 
+        return;
+      }
+      setMentorShadow(item.person);
+    },
+    drop(item, monitor) {
+      if (item.team === team) {
+        return;
+      }
+      updateMentors(team.mentors.concat(item.person));
+      item.onMoved();
+      return item;
+    },
+    collect: (monitor) => ({
+      isOverMentor: monitor.isOver(),
+    }),
+  });
+  if (!isOverMentor && mentorShadow) setMentorShadow(null);
+
+  const [{isOverMentee}, menteeDrop] = useDrop({
+    accept: "Person",
+    hover(item) {
+      if (item.team === team) { 
+        return;
+      }
+      setMenteeShadow(item.person);
+    },
+    drop(item, monitor) {
+      if (item.team === team) {
+        return;
+      }
+      updateMentees(team.mentees.concat(item.person));
+      item.onMoved();
+      return item;
+    },
+    collect: (monitor) => ({
+      isOverMentee: monitor.isOver(),
+    }),
+  });
+  if (!isOverMentee && menteeShadow) setMenteeShadow(null);
 
   return (
     <div>
       <div className="border-solid border-4 rounded-md border-indigo-400 bg-white divide-y divide-indigo-400 bg-slate-100 m-2 p-2">
-        <div>
+        <div ref={mentorDrop}>
           <div className="font-bold">Mentors</div>
           <div className="flex flex-wrap">
-            { team.mentors.map( (p, index) => (
-              <PersonView key={index} person={p} className="flex-auto"/>
+            { mentors.map( (p) => (
+              <PersonView key={"mentor"+p.uniqueId} person={p} team={team} onMoved={()=>onMentorMoved(p)} className="flex-auto"/>
             ))}
+            { mentorShadow != null ? (<PersonView ghost={true} person={mentorShadow} team={team} className="flex-auto"/>) : (<></>) }
           </div>
         </div>
-        <div>
+        <div ref={menteeDrop}>
           <div className="font-bold">Mentees</div>
           <div className="flex flex-wrap">
-            { team.mentees.map( (p, index) => (
-              <PersonView key={index} person={p} className="flex-auto"/>
+            { mentees.map( (p, index) => (
+              <PersonView key={"mentee"+p.uniqueId} person={p} team={team} onMoved={()=>onMenteeMoved(p)} className="flex-auto"/>
             ))}
+            { menteeShadow != null ? (<PersonView ghost={true} person={menteeShadow} team={team} className="flex-auto"/>) : (<></>) }
           </div>
         </div>
         <div className="grid md:grid-cols-3 sm:grid-cols-1 divide-2 divide-indigo-400 divide-x text-sm">
