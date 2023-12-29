@@ -109,15 +109,13 @@ export class Team extends Group {
 
   styles(): string[] {
     let lists: string[][] = [];
-    let people = this.people();
 
-    if (people.length == 1) return people[0].climbingStyles;
-
-    people.forEach((m) => {
+    this.people().forEach((m) => {
       lists.push(m.climbingStyles);
     });
 
     if (lists.length > 1) return findMatching(...lists);
+    else if (lists.length == 1) return lists[0];
     else return [];
   }
 
@@ -125,6 +123,7 @@ export class Team extends Group {
     let lists: string[][] = [];
     this.people().forEach((m) => lists.push(m.commutableGyms));
     if (lists.length > 1) return findMatching(...lists);
+    else if (lists.length == 1) return lists[0];
     else return [];
   }
 
@@ -137,8 +136,6 @@ export class Team extends Group {
     let lists: string[][] = [];
 
     let people = this.people();
-
-    if (people.length == 1) return people[0].commutableGyms;
 
     let drivers = people.filter( p => p.isDriver() );
 
@@ -153,6 +150,7 @@ export class Team extends Group {
     });
 
     if (lists.length > 1) return findMatching(...lists);
+    else if (lists.length == 1) return lists[0];
     else return [];
   }
 
@@ -168,13 +166,12 @@ export class Team extends Group {
 
   availability(): string[] {
     let lists: string[][] = [];
-    let people = this.people();
-    if (people.length == 1) return people[0].availability;
-    people.forEach((m) => {
+    this.people().forEach((m) => {
       lists.push(m.availability);
     });
 
     if (lists.length > 1) return findMatching(...lists);
+    else if (lists.length == 1) return lists[0];
     else return [];
   }
 

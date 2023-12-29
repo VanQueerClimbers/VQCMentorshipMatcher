@@ -124,6 +124,15 @@ describe("Models", () => {
       expect(team.commutableGyms()).toEqual(expect.arrayContaining(["a", "c"]));
     })
 
+    it("returns all gyms as non carpool if one person in team", () => {
+      let m1 = new Mentor("m1", "e", undefined, undefined, ["a", "c"], CarpoolStyle.DRIVER);
+      let team = new Team([], [m1]);
+      expect(team.carpoolGyms().length).toEqual(0);
+      expect(team.nonCarpoolGyms()).toEqual(expect.arrayContaining(["a", "c"]));
+      expect(team.commutableGyms()).toEqual(expect.arrayContaining(["a", "c"]));
+
+    });
+
     it("correctly calculates spaces in the team", () => {
       let m1 = new Mentor("m1", "a", undefined, ["a"], ["a", "b"], CarpoolStyle.DRIVER, ["a", "b"], 3);
       let m2 = new Mentor("m2", "b", undefined, ["a"], ["a", "b"], CarpoolStyle.DRIVER, ["a", "b"], 4);
