@@ -31,9 +31,9 @@ describe("Models", () => {
 
   describe("Mentor", () => {
     it("calculates compatibiliity", () => {
-      let comentor = new Mentor("name", "email1", undefined, ["b"], ["2"], undefined, ["..."], undefined, CoMentorStyle.COMENTOR);
-      let either = new Mentor("name", "email2", undefined, ["b"], ["2"], undefined, ["..."], undefined, CoMentorStyle.EITHER);
-      let solo = new Mentor("name", "email3", undefined, ["b"], ["2"], undefined, ["..."], undefined, CoMentorStyle.SOLO);
+      let comentor = new Mentor("name", "email1", undefined, ["b"], ["2"], undefined, ["..."], undefined, undefined, CoMentorStyle.COMENTOR);
+      let either = new Mentor("name", "email2", undefined, ["b"], ["2"], undefined, ["..."], undefined, undefined, CoMentorStyle.EITHER);
+      let solo = new Mentor("name", "email3", undefined, ["b"], ["2"], undefined, ["..."], undefined, undefined, CoMentorStyle.SOLO);
 
       expect(comentor.compatible(either)).toBeTruthy();
       expect(comentor.compatible(solo)).toBeFalsy();

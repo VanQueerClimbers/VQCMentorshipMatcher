@@ -27,7 +27,8 @@ export class Person {
     public carpoolStyle: CarpoolStyle = CarpoolStyle.SOLO,
     public availability: string[] = [],
     public groupSize: number = 3,
-    public otherResponses: OtherResponse[] = []
+    public otherResponses: OtherResponse[] = [],
+    public uniqueId: number = 0
   ) {};
 
   isPassenger(): boolean {
@@ -65,7 +66,9 @@ export class Mentor extends Person {
     carpoolStyle: CarpoolStyle = CarpoolStyle.SOLO,
     availability: string[] = [],
     groupSize: number = 3,
-    public wantCoMentor: CoMentorStyle = CoMentorStyle.SOLO
+    otherResponses: OtherResponse[] = [],
+    public wantCoMentor: CoMentorStyle = CoMentorStyle.SOLO,
+    uniqueId: number = 0,
   ) {
     super(
       name,
@@ -75,7 +78,9 @@ export class Mentor extends Person {
       commutableGyms,
       carpoolStyle,
       availability,
-      groupSize
+      groupSize,
+      otherResponses,
+      uniqueId,
     );
   };
 

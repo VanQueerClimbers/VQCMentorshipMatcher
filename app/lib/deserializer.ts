@@ -46,6 +46,7 @@ export class Deserializer {
   constructor(
     public mentorConfig: MentorCSVConfig = new MentorCSVConfig(),
     public menteeConfig: MenteeCSVConfig = new MenteeCSVConfig(),
+    public id = 0,
   ) {}
 
   readMentors(data: string): Mentor[] {
@@ -60,6 +61,7 @@ export class Deserializer {
 
   buildMentor(r: any): Mentor {
     let mentor = new Mentor("","","");
+    mentor.uniqueId = this.id++;
 
     for (const key in r) {
       let k = key.toLowerCase().trim();
@@ -139,6 +141,7 @@ export class Deserializer {
 
   buildMentee(r: any): Mentor {
     let mentee = new Mentor("","","");
+    mentee.uniqueId = this.id++;
 
     for (const key in r) {
       let k = key.toLowerCase().trim();

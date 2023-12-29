@@ -13,6 +13,7 @@ describe("Matcher", () => {
       undefined,
       [".","..","..."],
       2,
+      undefined,
       CoMentorStyle.SOLO,
     );
   }

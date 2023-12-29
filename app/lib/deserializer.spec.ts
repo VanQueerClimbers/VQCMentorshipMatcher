@@ -87,6 +87,7 @@ describe("Deserializer", () => {
         "friday1pm-5pm",
         "sunday6am-9am"
       ]));
+      expect(m1.uniqueId == m2.uniqueId).toBeFalsy();
     })
   });
 
