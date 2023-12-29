@@ -77,7 +77,7 @@ const MenuBar = ( { submitCallback, loadCallback, saveCallback } ) => {
         <div className="flex-auto flex py-1 px-2">
           <div className="flex-none">Mentee CSV:</div>
           <input
-            className="flex-auto ms-5"
+            className="flex-none ms-5"
             type="file"
             id="menteeInput"
             name="menteeInput"
@@ -88,7 +88,7 @@ const MenuBar = ( { submitCallback, loadCallback, saveCallback } ) => {
         <div className="flex-auto flex py-1 px-2">
           <div className="flex-none">Mentor CSV:</div>
           <input
-            className="flex-auto ms-5"
+            className="flex-none ms-5"
             type="file"
             id="mentorInput"
             name="mentorInput"

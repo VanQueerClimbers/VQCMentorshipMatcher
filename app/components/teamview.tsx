@@ -120,8 +120,8 @@ const TeamView = ( { team } ) => {
           <div className="p-1">
             <div className="font-bold text-center">Climbing Styles</div>
             <div className="flex flex-wrap">
-              { team.styles().map( (s,i) => (
-                <Tag key={i} text={s} className="flex-none"/>
+              { team.styles().map( (s) => (
+                <Tag key={s+team.uniqueId()} text={s} className="flex-none"/>
               ))}
             </div>
           </div>
@@ -129,18 +129,18 @@ const TeamView = ( { team } ) => {
             <div className="font-bold text-center">Gyms</div>
             <div className="flex flex-wrap">
               { team.nonCarpoolGyms().map( (s,i) => (
-                <Tag key={i} text={s} className="flex-none"/>
+                <Tag key={s+team.uniqueId()} text={s} className="flex-none"/>
               ))}
-              { team.carpoolGyms().map( (s,i) => (
-                <Tag key={i} text={s} className="flex-none"><FontAwesomeIcon className="mr-2" icon={faCar}/></Tag>
+              { team.carpoolGyms().map( (s) => (
+                <Tag key={s+team.uniqueId()} text={s} className="flex-none"><FontAwesomeIcon className="mr-2" icon={faCar}/></Tag>
               ))}
             </div>
           </div>
           <div className="p-1">
             <div className="font-bold text-center">Availability</div>
             <div className="flex flex-wrap">
-              { team.availability().map( (s,i) => (
-                <Tag key={i} text={s} className="flex-none"/>
+              { team.availability().map( (s) => (
+                <Tag key={s+team.uniqueId()} text={s} className="flex-none"/>
               ))}
             </div>
           </div>

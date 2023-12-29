@@ -106,7 +106,7 @@ export class Group {
 export class Team extends Group {
 
   uniqueId(): number {
-    return this.people().map( (p, i) => 10^i * p.uniqueId ).reduce( (a, v) => a+v );
+    return this.people().map( (p,i) => i+"-"+p.uniqueId ).join(",");
   }
 
   people(): Person[] {
@@ -201,6 +201,8 @@ export class Team extends Group {
     const menteesCompatible = this.mentees.filter(p => !p.compatible(person)).length == 0;
     const mentorsCompatible = this.mentors.filter(p => !p.compatible(person)).length == 0;
 
-    return groupSizeMatch && ( matchingGyms || carpoolCompatible ) && menteesCompatible && mentorsCompatible;
+    const availabilityCompatible = findMatching(this.availability(), person.availability).length > 0;
+
+    return groupSizeMatch && ( matchingGyms || carpoolCompatible ) && menteesCompatible && mentorsCompatible && availabilityCompatible;
   }
 }

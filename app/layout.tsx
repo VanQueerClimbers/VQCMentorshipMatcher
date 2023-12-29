@@ -22,8 +22,8 @@ export default function RootLayout( { children, }: { children: ReactNode } )  {
       deserializer.readMentors(mentorData)
     );
     let teams = buildTeams(group);
-    setLoading(false);
     setTeams(teams);
+    setLoading(false);
   }
 
   const saveState = () => {
@@ -38,13 +38,25 @@ export default function RootLayout( { children, }: { children: ReactNode } )  {
   };
 
   const loadState = (state: string) => {
+    setLoading(true);
+    // we reset ids to avoid bugs with the Drag and Drop library state.
+    let id = Math.floor(Math.random() * 100) + 1;
     const newTeams: Team[] = JSON.parse(state).map((s) => {
       return new Team(
-        s["mentees"].map((p) => Object.assign(new Person(), p)),
-        s["mentors"].map((p) => Object.assign(new Mentor(), p)),
+        s["mentees"].map((p) => {
+          let result = Object.assign(new Person(), p);
+          result.uniqueId = id++;
+          return result;
+        }),
+        s["mentors"].map((p) => {
+          let result = Object.assign(new Mentor(), p);
+          result.uniqueId = id++;
+          return result;
+        })
       );
     });
     setTeams(newTeams);
+    setLoading(false);
   };
 
   return (
