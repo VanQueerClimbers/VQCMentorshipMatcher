@@ -37,7 +37,7 @@ const TeamView = ( { team } ) => {
     updateMentees(team.mentees.filter( (m) => m.uniqueId != person.uniqueId ));
   };
 
-  const [{isOverMentor}, mentorDrop] = useDrop({
+  const [{isOverMentor, draggedMentor}, mentorDrop] = useDrop({
     accept: "Mentor",
     hover(item) {
       if (item.team === team) { 
@@ -55,11 +55,12 @@ const TeamView = ( { team } ) => {
     },
     collect: (monitor) => ({
       isOverMentor: monitor.isOver(),
+      draggedMentor: monitor.getItem(),
     }),
   });
   if (!isOverMentor && mentorShadow) setMentorShadow(null);
 
-  const [{isOverMentee}, menteeDrop] = useDrop({
+  const [{isOverMentee, draggedMentee}, menteeDrop] = useDrop({
     accept: "Person",
     hover(item) {
       if (item.team === team) { 
@@ -77,13 +78,26 @@ const TeamView = ( { team } ) => {
     },
     collect: (monitor) => ({
       isOverMentee: monitor.isOver(),
+      draggedMentee: monitor.getItem(),
     }),
   });
   if (!isOverMentee && menteeShadow) setMenteeShadow(null);
 
+  let color = "#818cf8";
+  const draggedPerson = draggedMentee ? draggedMentee : draggedMentor;
+  if (draggedPerson) {
+    if (team.compatible(draggedPerson.person)) {
+      color = "#4ade80";
+    } else {
+      color = "#f87171";
+    }
+  }
+
   return (
     <div>
-      <div className="border-solid border-4 rounded-md border-indigo-400 bg-white divide-y divide-indigo-400 bg-slate-100 m-2 p-2">
+      <div
+        className="border-solid border-4 rounded-md bg-white divide-y divide-indigo-400 bg-slate-100 m-2 p-2"
+        style={ { borderColor: color } }>
         <div ref={mentorDrop}>
           <div className="font-bold">Mentors</div>
           <div className="flex flex-wrap">

@@ -25,12 +25,13 @@ describe("Models", () => {
 
       expect(driver.compatible(passenger)).toBeTruthy();
       expect(driver.compatible(solo_compatible)).toBeTruthy();
-      expect(driver.compatible(solo_incompatible)).toBeFalsy();
+      expect(driver.compatible(solo_incompatible)).toBeTruthy(); // there may be another driver in the team
+      expect(solo_compatible.compatible(solo_incompatible)).toBeFalsy();
     });
   });
 
   describe("Mentor", () => {
-    it("calculates compatibiliity", () => {
+    it("calculates compatibility", () => {
       let comentor = new Mentor("name", "email1", undefined, ["b"], ["2"], undefined, ["..."], undefined, undefined, CoMentorStyle.COMENTOR);
       let either = new Mentor("name", "email2", undefined, ["b"], ["2"], undefined, ["..."], undefined, undefined, CoMentorStyle.EITHER);
       let solo = new Mentor("name", "email3", undefined, ["b"], ["2"], undefined, ["..."], undefined, undefined, CoMentorStyle.SOLO);
@@ -38,6 +39,13 @@ describe("Models", () => {
       expect(comentor.compatible(either)).toBeTruthy();
       expect(comentor.compatible(solo)).toBeFalsy();
       expect(solo.compatible(either)).toBeFalsy();
+    });
+
+    it("solo not compatibile with solo", () => {
+      let solo1 = new Mentor("name", "email2", undefined, ["b"], ["2"], undefined, ["..."], undefined, undefined, CoMentorStyle.SOLO);
+      let solo = new Mentor("name", "email3", undefined, ["b"], ["2"], undefined, ["..."], undefined, undefined, CoMentorStyle.SOLO);
+
+      expect(solo.compatible(solo1)).toBeFalsy();
     });
   });
 
@@ -178,6 +186,15 @@ describe("Models", () => {
 
       let p2 = new Person("p1", "e", undefined, ["a"], ["b"], CarpoolStyle.SOLO, ["a"]);
       expect(team.compatible(p2)).toBeFalsy();
+    })
+
+    it("compatibility doesn't allow 2 solo mentors", () => {
+      let solo1 = new Mentor("name", "email2", undefined, ["b"], ["2"], undefined, ["..."], undefined, undefined, CoMentorStyle.SOLO);
+      let solo = new Mentor("name", "email3", undefined, ["b"], ["2"], undefined, ["..."], undefined, undefined, CoMentorStyle.SOLO);
+
+      let team = new Team([], [solo1]);
+
+      expect(team.compatible(solo)).toBeFalsy();
     })
 
   })

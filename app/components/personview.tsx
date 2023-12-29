@@ -53,6 +53,12 @@ const PersonView = ( { person, team, onMoved, ghost = false } ) => {
             <Tag key={i} text={s} className="flex-none"/>
           ))}
         </div>
+        { isMentor && (
+        <div className="flex flex-wrap p-4">
+          <h3 className="flex-none font-bold mr-2">Mentor Style:</h3>
+          <p className="flex-auto">{(person as Mentor).wantCoMentor}</p>
+        </div>
+        ) }
         <div className="flex flex-wrap p-4">
           <h3 className="flex-none font-bold mr-2">Carpool Choice:</h3>
           <p className="flex-auto">{person.carpoolStyle}</p>

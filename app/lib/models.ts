@@ -3,12 +3,12 @@ import { findMatching } from "./util";
 export enum CarpoolStyle {
   DRIVER = "driver",
   PASSENGER = "passanger",
-  SOLO = "don't carpool",
+  SOLO = "no carpool",
 }
 
 export enum CoMentorStyle {
-  SOLO = "mentor solo",
-  COMENTOR = "co mentor",
+  SOLO = "solo",
+  COMENTOR = "comentor",
   EITHER = "either",
 }
 
@@ -44,14 +44,13 @@ export class Person {
   }
 
   compatible(person: Person): boolean {
-    const carpoolCompatible = !this.isSolo() && !person.isSolo() && (
-      person.isDriver() || this.isDriver() );
-    const matchingStyles = findMatching(this.climbingStyles, person.climbingStyles).length > 0;
     const matchingGyms = findMatching(this.commutableGyms, person.commutableGyms).length > 0;
+    const bothSolo = person.isSolo() && this.isSolo();
+    const matchingStyles = findMatching(this.climbingStyles, person.climbingStyles).length > 0;
     const matchingAvail = findMatching(this.availability, person.availability).length > 0;
     const differentEmail = this.email != person.email;
 
-    return matchingStyles && matchingAvail && ( matchingGyms || carpoolCompatible) && differentEmail;
+    return matchingStyles && matchingAvail && differentEmail && (!bothSolo || matchingGyms);
   }
 }
 
@@ -88,8 +87,11 @@ export class Mentor extends Person {
     return this.wantCoMentor == CoMentorStyle.SOLO;
   }
 
-  compatible(mentor: Mentor): boolean {
-    return super.compatible(mentor) && !this.isSoloMentor() && !mentor.isSoloMentor();
+  compatible(person: Person): boolean {
+    const personCompatible = super.compatible(person);
+    if (person instanceof Mentor) {
+      return personCompatible && !this.isSoloMentor() && !(person as Mentor).isSoloMentor();
+    } else return personCompatible;
   }
 }
 
@@ -189,14 +191,12 @@ export class Team extends Group {
 
   compatible(person: Person): boolean {
     const carpoolCompatible = !person.isSolo() && this.people().filter(p => p.isDriver()).length > 0;
-    const matchingStyles = findMatching(this.styles(), person.climbingStyles).length > 0;
     const matchingGyms = findMatching(this.commutableGyms(), person.commutableGyms).length > 0;
-    const matchingAvail = findMatching(this.availability(), person.availability).length > 0;
     const groupSizeMatch = this.openSlots() > 0 && person.groupSize > this.mentees.length;
 
-    const uniqueEmails = this.people().filter(p => p.email == person.email).length == 0;
+    const menteesCompatible = this.mentees.filter(p => !p.compatible(person)).length == 0;
+    const mentorsCompatible = this.mentors.filter(p => !p.compatible(person)).length == 0;
 
-
-    return matchingStyles && groupSizeMatch && matchingAvail && ( matchingGyms || carpoolCompatible ) && uniqueEmails;
+    return groupSizeMatch && ( matchingGyms || carpoolCompatible ) && menteesCompatible && mentorsCompatible;
   }
 }
