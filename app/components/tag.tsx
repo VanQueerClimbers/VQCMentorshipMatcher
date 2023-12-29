@@ -22,7 +22,7 @@ const Tag: React.FC<TagProps> = ( { text, children } ) => {
       className="text-xs font-bold bg-pink-600 border-pink-700 p-1 border-2 border-solid text-white rounded-lg"
       style={style}
       >
-      {text}{children}
+      {children}{text}
     </span>
   )
 };

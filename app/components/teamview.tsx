@@ -1,5 +1,7 @@
 'use client';
 import { React, useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCar } from '@fortawesome/free-solid-svg-icons';
 import { Team } from '../lib/models'
 import PersonView from './personview.tsx'
 import Tag from './tag.tsx'
@@ -40,7 +42,7 @@ const TeamView: React.FC<ChildProps> = ( { team } ) => {
           </div>
         </div>
         <div className="grid md:grid-cols-3 sm:grid-cols-1 divide-2 divide-indigo-400 divide-x text-sm">
-          <div>
+          <div className="p-1">
             <div className="font-bold text-center">Climbing Styles</div>
             <div className="flex flex-wrap">
               { team.styles().map( (s,i) => (
@@ -48,18 +50,18 @@ const TeamView: React.FC<ChildProps> = ( { team } ) => {
               ))}
             </div>
           </div>
-          <div>
+          <div className="p-1">
             <div className="font-bold text-center">Gyms</div>
             <div className="flex flex-wrap">
               { team.nonCarpoolGyms().map( (s,i) => (
                 <Tag key={i} text={s} className="flex-none"/>
               ))}
               { team.carpoolGyms().map( (s,i) => (
-                <Tag key={i} text={s} className="flex-none"></Tag>
+                <Tag key={i} text={s} className="flex-none"><FontAwesomeIcon className="mr-2" icon={faCar}/></Tag>
               ))}
             </div>
           </div>
-          <div>
+          <div className="p-1">
             <div className="font-bold text-center">Availability</div>
             <div className="flex flex-wrap">
               { team.availability().map( (s,i) => (
