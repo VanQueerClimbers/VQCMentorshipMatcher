@@ -2,10 +2,17 @@
 import { useState, useRef } from 'react'
 import { useDrag } from "react-dnd";
 import { Person, Mentor, Team } from '../lib/models'
-import Modal from './modal.tsx'
-import Tag from './tag.tsx'
+import Modal from './modal'
+import Tag from './tag'
 
-const PersonView = ( { person, team, onMoved, ghost = false } ) => {
+interface PersonProps {
+  person: Person;
+  team: Team;
+  onMoved?: ()=>void;
+  ghost?: boolean;
+}
+
+const PersonView = ( { person, team, onMoved, ghost = false } : PersonProps ) => {
   const [openModal, setOpenModal] = useState(false);
 
   const openPersonDetails = () => { setOpenModal(true); };
@@ -31,7 +38,7 @@ const PersonView = ( { person, team, onMoved, ghost = false } ) => {
         onClick={openPersonDetails}
         ref={ghost ? null : drag}
         >
-        <Tag text={person.pronouns} className="flex-none"/>
+        <Tag text={person.pronouns}/>
         <h2 className="flex-auto p-1">{person.name}</h2>
       </div>
       <Modal
@@ -40,17 +47,17 @@ const PersonView = ( { person, team, onMoved, ghost = false } ) => {
         >
         <div className="flex flex-wrap p-4">
           <h1 className="mr-2 font-bold">{person.name}</h1>
-          <Tag text={person.pronouns} className="flex-none"/>
+          <Tag text={person.pronouns}/>
         </div>
         <p className="p-4">{person.email}</p>
         <div className="flex flex-wrap p-4">
           {person.climbingStyles.map((s,i) => (
-            <Tag key={i} text={s} className="flex-none"/>
+            <Tag key={i} text={s}/>
           ))}
         </div>
         <div className="flex flex-wrap p-4">
           {person.commutableGyms.map((s,i) => (
-            <Tag key={i} text={s} className="flex-none"/>
+            <Tag key={i} text={s}/>
           ))}
         </div>
         { isMentor && (
@@ -65,7 +72,7 @@ const PersonView = ( { person, team, onMoved, ghost = false } ) => {
         </div>
         <div className="flex flex-wrap p-4">
           {person.availability.map((s,i) => (
-            <Tag key={i} text={s} className="flex-none"/>
+            <Tag key={i} text={s}/>
           ))}
         </div>
         <div className="flex flex-wrap p-4">

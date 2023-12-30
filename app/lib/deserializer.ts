@@ -115,13 +115,13 @@ export class Deserializer {
     return mentor;
   }
 
-  handleDate(mentor: Mentor, key: string, row: any, targetKey: string): boolean {
+  handleDate(person: Person, key: string, row: any, targetKey: string): boolean {
     let k = key.toLowerCase().trim();
     if (k.includes(targetKey)) {
       let val: string = row[key].toLowerCase().replace(/\s/g, "");
       if (!val.includes("notavailable")) {
         val.split(",").forEach( (val) => {
-          mentor.availability.push(targetKey+val);
+          person.availability.push(targetKey+val);
         });
       }
       return true;

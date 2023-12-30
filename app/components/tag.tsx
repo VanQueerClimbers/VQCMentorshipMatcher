@@ -1,7 +1,12 @@
 'use client';
 import * as crypto from 'crypto'
 
-const Tag = ( { text, children } ) => {
+interface TagProps {
+  text: string;
+  children?: any;
+}
+
+const Tag = ( { text, children = [] } : TagProps ) => {
   const hash = crypto.createHash('md5').update(text).digest('hex');
 
   const darkFactor = 200;

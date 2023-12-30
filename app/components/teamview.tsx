@@ -4,23 +4,27 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCar } from '@fortawesome/free-solid-svg-icons';
 import { useDrop } from "react-dnd";
 import * as _ from 'lodash'
-import { Team } from '../lib/models'
-import PersonView from './personview.tsx'
-import Tag from './tag.tsx'
-import Modal from './modal.tsx'
+import { Team, Person, Mentor } from '../lib/models'
+import PersonView from './personview'
+import Tag from './tag'
+import Modal from './modal'
 
-const TeamView = ( { team } ) => {
+interface TeamProps {
+  team: Team;
+}
+
+const TeamView = ( { team }: TeamProps ) => {
   const [mentors, setLocalMentors] = useState([...team.mentors]);
   const [mentees, setLocalMentees] = useState([...team.mentees]);
   const [openModal, setOpenModal] = useState(false);
-  const [mentorShadow, setMentorShadow] = useState(null);
-  const [menteeShadow, setMenteeShadow] = useState(null);
+  const [mentorShadow, setMentorShadow] = useState<Person | null>(null);
+  const [menteeShadow, setMenteeShadow] = useState<Person | null>(null);
 
   const openTeamDetails = () => { setOpenModal(true); };
   const closeTeamDetails = () => { setOpenModal(false); };
 
 
-  const updateMentors = (newMentors: Person[]) => {
+  const updateMentors = (newMentors: Mentor[]) => {
     team.mentors = [...newMentors];
     setLocalMentors(newMentors);
   };
@@ -30,7 +34,7 @@ const TeamView = ( { team } ) => {
     setLocalMentees(newMentees);
   };
 
-  const onMentorMoved = (person: Person) => {
+  const onMentorMoved = (person: Mentor) => {
     updateMentors(team.mentors.filter( (m) => m.uniqueId != person.uniqueId ));
   };
   const onMenteeMoved = (person: Person) => {
@@ -39,7 +43,7 @@ const TeamView = ( { team } ) => {
 
   const [{isOverMentor, draggedMentor}, mentorDrop] = useDrop({
     accept: "Mentor",
-    hover(item) {
+    hover(item: {person: Mentor, team: Team, onMoved: ()=>void}) {
       if (item.team === team) { 
         return;
       }
@@ -62,7 +66,7 @@ const TeamView = ( { team } ) => {
 
   const [{isOverMentee, draggedMentee}, menteeDrop] = useDrop({
     accept: "Person",
-    hover(item) {
+    hover(item: {person: Person, team: Team, onMoved: ()=>void}) {
       if (item.team === team) { 
         return;
       }
@@ -102,18 +106,18 @@ const TeamView = ( { team } ) => {
           <div className="font-bold">Mentors</div>
           <div className="flex flex-wrap">
             { mentors.map( (p) => (
-              <PersonView key={"mentor"+p.uniqueId} person={p} team={team} onMoved={()=>onMentorMoved(p)} className="flex-auto"/>
+              <PersonView key={"mentor"+p.uniqueId} person={p} team={team} onMoved={()=>onMentorMoved(p)}/>
             ))}
-            { mentorShadow != null ? (<PersonView ghost={true} person={mentorShadow} team={team} className="flex-auto"/>) : (<></>) }
+            { mentorShadow != null ? (<PersonView ghost={true} person={mentorShadow} team={team}/>) : (<></>) }
           </div>
         </div>
         <div ref={menteeDrop}>
           <div className="font-bold">Mentees</div>
           <div className="flex flex-wrap">
             { mentees.map( (p, index) => (
-              <PersonView key={"mentee"+p.uniqueId} person={p} team={team} onMoved={()=>onMenteeMoved(p)} className="flex-auto"/>
+              <PersonView key={"mentee"+p.uniqueId} person={p} team={team} onMoved={()=>onMenteeMoved(p)}/>
             ))}
-            { menteeShadow != null ? (<PersonView ghost={true} person={menteeShadow} team={team} className="flex-auto"/>) : (<></>) }
+            { menteeShadow != null ? (<PersonView ghost={true} person={menteeShadow} team={team}/>) : (<></>) }
           </div>
         </div>
         <div className="grid md:grid-cols-3 sm:grid-cols-1 divide-2 divide-indigo-400 divide-x text-sm">
@@ -121,7 +125,7 @@ const TeamView = ( { team } ) => {
             <div className="font-bold text-center">Climbing Styles</div>
             <div className="flex flex-wrap">
               { team.styles().map( (s) => (
-                <Tag key={s+team.uniqueId()} text={s} className="flex-none"/>
+                <Tag key={s+team.uniqueId()} text={s}/>
               ))}
             </div>
           </div>
@@ -129,10 +133,12 @@ const TeamView = ( { team } ) => {
             <div className="font-bold text-center">Gyms</div>
             <div className="flex flex-wrap">
               { team.nonCarpoolGyms().map( (s,i) => (
-                <Tag key={s+team.uniqueId()} text={s} className="flex-none"/>
+                <Tag key={s+team.uniqueId()} text={s}/>
               ))}
               { team.carpoolGyms().map( (s) => (
-                <Tag key={s+team.uniqueId()} text={s} className="flex-none"><FontAwesomeIcon className="mr-2" icon={faCar}/></Tag>
+                <Tag key={s+team.uniqueId()} text={s}>
+                  <FontAwesomeIcon className="mr-2" icon={faCar}/>
+                </Tag>
               ))}
             </div>
           </div>
@@ -140,7 +146,7 @@ const TeamView = ( { team } ) => {
             <div className="font-bold text-center">Availability</div>
             <div className="flex flex-wrap">
               { team.availability().map( (s) => (
-                <Tag key={s+team.uniqueId()} text={s} className="flex-none"/>
+                <Tag key={s+team.uniqueId()} text={s}/>
               ))}
             </div>
           </div>

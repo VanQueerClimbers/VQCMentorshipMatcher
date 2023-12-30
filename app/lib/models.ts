@@ -105,8 +105,8 @@ export class Group {
 
 export class Team extends Group {
 
-  uniqueId(): number {
-    return this.people().map( (p,i) => i+"-"+p.uniqueId ).join(",");
+  uniqueId(): string {
+    return this.people().map( (p,i) => `${p.uniqueId}-${i}` ).join(",");
   }
 
   people(): Person[] {

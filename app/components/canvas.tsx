@@ -1,12 +1,17 @@
 'use client';
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { React, useState } from 'react';
+import { useState } from 'react';
 import { Team, Person, Mentor, OtherResponse, CarpoolStyle } from '../lib/models'
-import TeamView from './teamview.tsx'
+import TeamView from './teamview'
 
-const Canvas = ( { isLoading, teams } ) => {
-  const renderTeams = (teams: Team[]): JSX.Element[] => {
+interface CanvasProps {
+  isLoading: boolean;
+  teams: Team[];
+}
+
+const Canvas = ( { isLoading, teams } : CanvasProps ) => {
+  const renderTeams = (teams: Team[]) => {
     return (
       <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
         { teams.map( (team) => (<TeamView key={team.uniqueId()} team={team}/>)) }

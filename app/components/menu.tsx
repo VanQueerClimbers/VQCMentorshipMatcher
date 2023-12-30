@@ -1,8 +1,14 @@
 'use client';
-import { React, useState, useRef } from 'react';
+import { useState, useRef, ChangeEvent } from 'react';
 
-const MenuBar = ( { submitCallback, loadCallback, saveCallback } ) => {
-  const loadInputRef = useRef(null);
+interface MenuProps {
+  submitCallback: (mentee: string, mentor: string) => void;
+  loadCallback: (data: string) => void;
+  saveCallback: () => void;
+}
+
+const MenuBar = ( { submitCallback, loadCallback, saveCallback } : MenuProps ) => {
+  const loadInputRef = useRef<HTMLInputElement | null>(null);
   const [mentorData, setMentorData] = useState("");
   const [menteeData, setMenteeData] = useState("");
 
@@ -30,7 +36,7 @@ const MenuBar = ( { submitCallback, loadCallback, saveCallback } ) => {
     }
   };
 
-  const submitPressed = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const submitPressed = (event: React.MouseEvent<HTMLInputElement>) => {
     event.preventDefault();
     if (!menteeData || !mentorData) {
       alert("You need to upload mentor and mentee CSVs.");
@@ -52,7 +58,9 @@ const MenuBar = ( { submitCallback, loadCallback, saveCallback } ) => {
   };
 
   const loadItem = () => {
-    loadInputRef.current.click();
+    if (loadInputRef.current) {
+      loadInputRef.current.click();
+    }
   };
 
   return (

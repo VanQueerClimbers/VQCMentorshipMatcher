@@ -15,7 +15,7 @@ export function buildTeams(group: Group): Team[] {
   return teams;
 }
 
-function makeTeamsFromMentors(mentors: Mentor[]) {
+function makeTeamsFromMentors(mentors: Mentor[]): Team[] {
   mentors = sortMentors(mentors);
 
   let teams: Team[] = [];
