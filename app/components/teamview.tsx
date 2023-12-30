@@ -120,7 +120,7 @@ const TeamView = ( { team }: TeamProps ) => {
             { menteeShadow != null ? (<PersonView ghost={true} person={menteeShadow} team={team}/>) : (<></>) }
           </div>
         </div>
-        <div className="grid md:grid-cols-3 sm:grid-cols-1 divide-2 divide-indigo-400 divide-x text-sm">
+        <div className="divide-2 divide-indigo-400 divide-y text-sm">
           <div className="p-1">
             <div className="font-bold text-center">Climbing Styles</div>
             <div className="flex flex-wrap">
