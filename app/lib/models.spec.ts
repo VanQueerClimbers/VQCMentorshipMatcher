@@ -104,6 +104,7 @@ describe("Models", () => {
       expect(team.availability()).toEqual(expect.arrayContaining(["b"]));
     })
 
+
     it("carpool drivers don't have to drive to gyms they don't commute to", () => {
       let p1 = new Person("p1", "e", undefined, undefined, ["a", "c"], CarpoolStyle.SOLO);
       let p2 = new Person("p2", "e", undefined, undefined, ["a"], CarpoolStyle.DRIVER);
@@ -166,6 +167,14 @@ describe("Models", () => {
       expect(team.compatible(p2)).toBeFalsy();
       expect(team.compatible(p3)).toBeFalsy();
       expect(team.compatible(p4)).toBeTruthy();
+    })
+
+    it("empty team always compatible", () => {
+      let p1 = new Person("p1", "e", undefined, undefined, undefined, undefined, ["a", "b", "c"]);
+
+      let team = new Team();
+
+      expect(team.compatible(p1)).toBeTruthy();
     })
 
     it("compatibility considers the new persons group size", () => {

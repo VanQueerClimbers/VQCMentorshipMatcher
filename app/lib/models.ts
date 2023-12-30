@@ -194,6 +194,8 @@ export class Team extends Group {
   }
 
   compatible(person: Person): boolean {
+    if (this.mentors.length == 0 && this.mentees.length == 0) return true;
+
     const carpoolCompatible = !person.isSolo() && this.people().filter(p => p.isDriver()).length > 0;
     const matchingGyms = findMatching(this.commutableGyms(), person.commutableGyms).length > 0;
     const groupSizeMatch = (this.openSlots() > 0 && person.groupSize > this.mentees.length) || (person instanceof Mentor);
