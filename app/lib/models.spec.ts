@@ -178,6 +178,16 @@ describe("Models", () => {
       expect(team.compatible(p2)).toBeFalsy();
     })
 
+    it("compatibility ignores group size for mentors", () => {
+      let m1 = new Mentor("m1", "e", undefined, ["a"], ["a", "b"], CarpoolStyle.DRIVER, ["a", "b"], 1, undefined, CoMentorStyle.EITHER);
+      let p1 = new Person("p1", "f", undefined, ["a"], ["a", "b"], CarpoolStyle.SOLO, ["a", "b"]);
+      let team = new Team([p1], [m1]);
+
+      let m2 = new Mentor("m2", "g", undefined, ["a"], ["a", "b"], CarpoolStyle.DRIVER, ["a", "b"], 1, undefined, CoMentorStyle.EITHER);
+
+      expect(team.compatible(m2)).toBeTruthy();
+    })
+
     // some people sign up to be both mentors and mentees. We don't want to
     // match them with themselves
     it("compatibility does not allow members with same email address", () => {
