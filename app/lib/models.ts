@@ -111,7 +111,7 @@ export class Team extends Group {
   constructor(
     mentees: Person[] = [],
     mentors: Mentor[] = [],
-    public uniqueId = teamIds++,
+    public uniqueId:string = String(teamIds++),
   ) {
     super(mentees, mentors);
   }
