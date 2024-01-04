@@ -205,7 +205,8 @@ export class Team extends Group {
 
     const carpoolCompatible = !person.isSolo() && this.people().filter(p => p.isDriver()).length > 0;
     const matchingGyms = findMatching(this.commutableGyms(), person.commutableGyms).length > 0;
-    const groupSizeMatch = (this.openSlots() > 0 && person.groupSize > this.mentees.length) || (person instanceof Mentor);
+    const personGroupSizeMatch = !(person instanceof Mentor) && this.openSlots() > 0 && person.groupSize > this.mentees.length
+    const groupSizeMatch = personGroupSizeMatch || (person instanceof Mentor && this.mentors.length < 2);
 
     const menteesCompatible = this.mentees.filter(p => !p.compatible(person)).length == 0;
     const mentorsCompatible = this.mentors.filter(p => !p.compatible(person)).length == 0;

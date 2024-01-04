@@ -216,6 +216,15 @@ describe("Models", () => {
       expect(team.compatible(solo)).toBeFalsy();
     })
 
+    it("compatibility doesn't allow more than 2 mentors", () => {
+      let m1 = new Mentor("name", "email2", undefined, ["b"], ["2"], undefined, ["..."], 3, undefined, CoMentorStyle.EITHER);
+      let m2 = new Mentor("name", "email3", undefined, ["b"], ["2"], undefined, ["..."], 3, undefined, CoMentorStyle.EITHER);
+      let m3 = new Mentor("name", "email4", undefined, ["b"], ["2"], undefined, ["..."], 3, undefined, CoMentorStyle.EITHER);
+
+      let team = new Team([], [m1,m2]);
+
+      expect(team.compatible(m3)).toBeFalsy();
+    })
   })
 
 })
