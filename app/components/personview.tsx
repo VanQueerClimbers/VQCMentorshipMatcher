@@ -1,5 +1,5 @@
 'use client';
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { useDrag } from "react-dnd";
 import { Person, Mentor, Team } from '../lib/models'
 import Modal from './modal'
