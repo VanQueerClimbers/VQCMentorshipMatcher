@@ -67,17 +67,17 @@ export default function Page() {
 
 
   return (
-    <body className="font-sans bg-gray-800">
+    <body className="font-sans">
       <MenuBar
         submitCallback={csvDataReceived}
         loadCallback={loadState}
         saveCallback={saveState}/>
       <div className="h-screen w-screen">
         { loading ? (
-          <p>Loading...</p>
+          <p className="text-white text-center">Loading...</p>
         ) : (<></>)}
         { teams.length == 0 ? (
-          <p>Upload mentor and mentee CSVs and press Match, or load a previously saved file.</p>
+          <p className="text-white text-center">Upload mentor and mentee CSVs and press Match, or load a previously saved file.</p>
         ) : (<></>)}
         <Canvas teams={teams} deleteTeam={deleteTeam} createTeam={createTeam}/>
       </div>
