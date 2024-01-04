@@ -90,7 +90,9 @@ export class Mentor extends Person {
   compatible(person: Person): boolean {
     const personCompatible = super.compatible(person);
     if (person instanceof Mentor) {
-      return personCompatible && !this.isSoloMentor() && !(person as Mentor).isSoloMentor();
+      const soloCompatible = !this.isSoloMentor() && !(person as Mentor).isSoloMentor();
+      const groupSizeCompatible = this.groupSize > 1 && person.groupSize > 1;
+      return personCompatible && soloCompatible && groupSizeCompatible;
     } else return personCompatible;
   }
 }

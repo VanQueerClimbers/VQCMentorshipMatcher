@@ -47,6 +47,13 @@ describe("Models", () => {
 
       expect(solo.compatible(solo1)).toBeFalsy();
     });
+
+    it("not compatible if someone wants group size of 1", () => {
+      let solo1 = new Mentor("name", "email2", undefined, ["b"], ["2"], undefined, ["..."], 3, undefined, CoMentorStyle.EITHER);
+      let solo = new Mentor("name", "email3", undefined, ["b"], ["2"], undefined, ["..."], 1, undefined, CoMentorStyle.EITHER);
+
+      expect(solo.compatible(solo1)).toBeFalsy();
+    });
   });
 
 
@@ -188,11 +195,12 @@ describe("Models", () => {
     })
 
     it("compatibility ignores group size for mentors", () => {
-      let m1 = new Mentor("m1", "e", undefined, ["a"], ["a", "b"], CarpoolStyle.DRIVER, ["a", "b"], 1, undefined, CoMentorStyle.EITHER);
+      let m1 = new Mentor("m1", "e", undefined, ["a"], ["a", "b"], CarpoolStyle.DRIVER, ["a", "b"], 2, undefined, CoMentorStyle.EITHER);
       let p1 = new Person("p1", "f", undefined, ["a"], ["a", "b"], CarpoolStyle.SOLO, ["a", "b"]);
-      let team = new Team([p1], [m1]);
+      let p2 = new Person("p1", "h", undefined, ["a"], ["a", "b"], CarpoolStyle.SOLO, ["a", "b"]);
+      let team = new Team([p1, p2], [m1]);
 
-      let m2 = new Mentor("m2", "g", undefined, ["a"], ["a", "b"], CarpoolStyle.DRIVER, ["a", "b"], 1, undefined, CoMentorStyle.EITHER);
+      let m2 = new Mentor("m2", "g", undefined, ["a"], ["a", "b"], CarpoolStyle.DRIVER, ["a", "b"], 2, undefined, CoMentorStyle.EITHER);
 
       expect(team.compatible(m2)).toBeTruthy();
     })
