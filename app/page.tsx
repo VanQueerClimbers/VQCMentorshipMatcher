@@ -57,6 +57,15 @@ export default function Page() {
     setLoading(false);
   };
 
+  const deleteTeam = (teamId: string) => {
+    setTeams(teams.filter((t) => t.uniqueId != teamId));
+  };
+
+  const createTeam = () => {
+    setTeams(teams.concat(new Team()));
+  }
+
+
   return (
     <body className="font-sans">
       <MenuBar
@@ -70,7 +79,7 @@ export default function Page() {
         { teams.length == 0 ? (
           <p>Upload mentor and mentee CSVs and press Match, or load a previously saved file.</p>
         ) : (<></>)}
-        <Canvas teams={teams}/>
+        <Canvas teams={teams} deleteTeam={deleteTeam} createTeam={createTeam}/>
       </div>
     </body>
   )

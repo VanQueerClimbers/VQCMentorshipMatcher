@@ -11,9 +11,10 @@ import Modal from './modal'
 
 interface TeamProps {
   team: Team;
+  deleteMe: ()=>void;
 }
 
-const TeamView = ( { team }: TeamProps ) => {
+const TeamView = ( { team, deleteMe }: TeamProps ) => {
   const [mentors, setLocalMentors] = useState([...team.mentors]);
   const [mentees, setLocalMentees] = useState([...team.mentees]);
   const [openModal, setOpenModal] = useState(false);
@@ -125,7 +126,7 @@ const TeamView = ( { team }: TeamProps ) => {
             <div className="font-bold text-center">Climbing Styles</div>
             <div className="flex flex-wrap">
               { team.styles().map( (s) => (
-                <Tag key={s+team.uniqueId()} text={s}/>
+                <Tag key={s+team.uniqueId} text={s}/>
               ))}
             </div>
           </div>
@@ -133,10 +134,10 @@ const TeamView = ( { team }: TeamProps ) => {
             <div className="font-bold text-center">Gyms</div>
             <div className="flex flex-wrap">
               { team.nonCarpoolGyms().map( (s,i) => (
-                <Tag key={s+team.uniqueId()} text={s}/>
+                <Tag key={s+team.uniqueId} text={s}/>
               ))}
               { team.carpoolGyms().map( (s) => (
-                <Tag key={s+team.uniqueId()} text={s}>
+                <Tag key={s+team.uniqueId} text={s}>
                   <FontAwesomeIcon className="mr-2" icon={faCar}/>
                 </Tag>
               ))}
@@ -146,7 +147,7 @@ const TeamView = ( { team }: TeamProps ) => {
             <div className="font-bold text-center">Availability</div>
             <div className="flex flex-wrap">
               { team.availability().map( (s) => (
-                <Tag key={s+team.uniqueId()} text={s}/>
+                <Tag key={s+team.uniqueId} text={s}/>
               ))}
             </div>
           </div>
@@ -156,6 +157,13 @@ const TeamView = ( { team }: TeamProps ) => {
           onClick={openTeamDetails}>
           Details
         </button>
+        { team.people().length == 0 ? (
+        <button
+          className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 float-right"
+          onClick={deleteMe}>
+          Delete
+        </button>
+        ): (<></>) }
       </div>
       <Modal
         isOpen={openModal}

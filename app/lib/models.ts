@@ -103,10 +103,17 @@ export class Group {
   ) {}
 }
 
+
+let teamIds = 0;
+
 export class Team extends Group {
 
-  uniqueId(): string {
-    return this.people().map( (p,i) => `${p.uniqueId}-${i}` ).join(",");
+  constructor(
+    mentees: Person[] = [],
+    mentors: Mentor[] = [],
+    public uniqueId = teamIds++,
+  ) {
+    super(mentees, mentors);
   }
 
   people(): Person[] {
