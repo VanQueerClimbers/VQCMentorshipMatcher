@@ -67,12 +67,12 @@ export default function Page() {
 
 
   return (
-    <body className="font-sans">
+    <body className="font-sans bg-gray-800">
       <MenuBar
         submitCallback={csvDataReceived}
         loadCallback={loadState}
         saveCallback={saveState}/>
-      <div className="h-screen w-screen bg-gray-800">
+      <div className="h-screen w-screen">
         { loading ? (
           <p>Loading...</p>
         ) : (<></>)}
