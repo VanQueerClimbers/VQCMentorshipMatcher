@@ -211,8 +211,9 @@ export class Team extends Group {
     const menteesCompatible = this.mentees.filter(p => !p.compatible(person)).length == 0;
     const mentorsCompatible = this.mentors.filter(p => !p.compatible(person)).length == 0;
 
+    const stylesCompatible = findMatching(this.styles(), person.climbingStyles).length > 0;
     const availabilityCompatible = findMatching(this.availability(), person.availability).length > 0;
 
-    return groupSizeMatch && ( matchingGyms || carpoolCompatible ) && menteesCompatible && mentorsCompatible && availabilityCompatible;
+    return groupSizeMatch && ( matchingGyms || carpoolCompatible ) && menteesCompatible && mentorsCompatible && stylesCompatible && availabilityCompatible;
   }
 }

@@ -225,6 +225,21 @@ describe("Models", () => {
 
       expect(team.compatible(m3)).toBeFalsy();
     })
+
+    it("compatibility requires overlap in all categories", () => {
+      let m1 = new Mentor("name", "email2", undefined, ["a", "b"], ["1", "2"], undefined, [".", ".."], 3, undefined, CoMentorStyle.EITHER);
+      let m2 = new Mentor("name", "email3", undefined, ["b", "c"], ["2", "3"], undefined, ["..", "..."], 3, undefined, CoMentorStyle.EITHER);
+
+      let p1 = new Person("p1", "e", undefined, ["a", "c"], ["2"], CarpoolStyle.SOLO, [".."]);
+      let p2 = new Person("p1", "e", undefined, ["b"] , ["1","3"], CarpoolStyle.SOLO, [".."]);
+      let p3 = new Person("p1", "e", undefined, ["b"], ["2"], CarpoolStyle.SOLO, [".", "..."]);
+
+      let team = new Team([], [m1,m2]);
+
+      expect(team.compatible(p1)).toBeFalsy();
+      expect(team.compatible(p2)).toBeFalsy();
+      expect(team.compatible(p3)).toBeFalsy();
+    })
   })
 
 })

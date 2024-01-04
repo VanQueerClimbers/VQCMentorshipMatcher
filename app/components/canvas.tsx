@@ -15,7 +15,7 @@ const Canvas = ( { teams, deleteTeam, createTeam } : CanvasProps ) => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 bg-gray-800">
+      <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
         { teams.map( (team) => (<TeamView key={team.uniqueId} team={team} deleteMe={() => deleteTeam(team.uniqueId)} />)) }
         { teams.length > 0 ? (
           <div className="text-center">

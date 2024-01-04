@@ -72,7 +72,7 @@ export default function Page() {
         submitCallback={csvDataReceived}
         loadCallback={loadState}
         saveCallback={saveState}/>
-      <div className="h-screen w-screen">
+      <div className="h-screen w-screen bg-gray-800">
         { loading ? (
           <p>Loading...</p>
         ) : (<></>)}
