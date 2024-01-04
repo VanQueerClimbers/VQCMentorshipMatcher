@@ -33,6 +33,14 @@ function makeTeamsFromMentors(mentors: Mentor[]): Team[] {
   while (groupMentors.length > 0) {
     let singleMentor = groupMentors[0];
 
+    // if don't mind going solo, we would preffer to make them solo
+    // the mentors are ordered so comentor required entries are first.
+    if (singleMentor.wantCoMentor == CoMentorStyle.EITHER) {
+      teams.push(new Team([], [singleMentor]));
+      groupMentors.splice(0, 1);
+      continue;
+    }
+
     let found = false;
     for (let i = 1; i < groupMentors.length; i++) {
       const mentor = groupMentors[i];

@@ -135,6 +135,24 @@ describe("Matcher", () => {
         if (team.mentors[0].name == "g") return team.mentors[1].name == "e";
       }).length).toEqual(1);
     });
+
+    it("mentors who put either comentor style aren't put into one group", () => {
+      let group = new Group([], []);
+      let m = createDefaultMentor("e");
+      m.wantCoMentor = CoMentorStyle.EITHER;
+      m.availability = ["a"];
+      m.commutableGyms = ["a", "b"];
+      group.mentors.push(m);
+
+      m = createDefaultMentor("f");
+      m.wantCoMentor = CoMentorStyle.EITHER;
+      m.availability = ["a", "b"];
+      m.commutableGyms = ["a", "b"];
+      group.mentors.push(m);
+
+      let teams = buildTeams(group);
+      expect(teams.length).toEqual(2);
+    });
   });
 
   describe("Mentee Groups", () => {
