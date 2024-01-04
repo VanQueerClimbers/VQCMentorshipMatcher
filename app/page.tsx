@@ -64,7 +64,13 @@ export default function Page() {
         loadCallback={loadState}
         saveCallback={saveState}/>
       <div className="h-screen w-screen">
-        <Canvas isLoading={loading} teams={teams}/>
+        { loading ? (
+          <p>Loading...</p>
+        ) : (<></>)}
+        { teams.length == 0 ? (
+          <p>Upload mentor and mentee CSVs and press Match, or load a previously saved file.</p>
+        ) : (<></>)}
+        <Canvas teams={teams}/>
       </div>
     </body>
   )

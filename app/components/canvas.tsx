@@ -6,34 +6,32 @@ import { Team, Person, Mentor, OtherResponse, CarpoolStyle } from '../lib/models
 import TeamView from './teamview'
 
 interface CanvasProps {
-  isLoading: boolean;
   teams: Team[];
 }
 
-const Canvas = ( { isLoading, teams } : CanvasProps ) => {
-  const renderTeams = (teams: Team[]) => {
-    return (
-      <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
-        { teams.map( (team) => (<TeamView key={team.uniqueId()} team={team}/>)) }
-      </div>
-    )
-  };
+const Canvas = ( { teams } : CanvasProps ) => {
+  const [localTeams, setTeams] = useState<Team[]>([...teams]);
 
-  let children = (
-      <p>Upload mentor and mentee CSVs and press Match, or load a previously saved file.</p>
-  );
-
-  if (isLoading) {
-    children = (
-      <p>Loading...</p>
-    );
-  } else if (teams.length > 0) {
-    children = renderTeams(teams);
+  const addTeam = () => {
+    teams.push(new Team());
+    setTeams([...teams]);
   }
 
   return (
     <DndProvider backend={HTML5Backend}>
-        {children}
+      <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 bg-gray-800">
+        { teams.map( (team) => (<TeamView key={team.uniqueId()} team={team}/>)) }
+        { teams.length > 0 ? (
+          <div className="text-center">
+            <button
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              onClick={addTeam}
+              >
+              Add new team
+            </button>
+          </div>
+        ): (<></>)}
+      </div>
     </DndProvider>
   );
 };
