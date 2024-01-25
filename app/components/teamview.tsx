@@ -104,7 +104,7 @@ const TeamView = ( { team, deleteMe }: TeamProps ) => {
         className="border-solid border-4 rounded-md bg-white divide-y divide-indigo-400 bg-slate-100 m-2 p-2"
         style={ { borderColor: color } }>
         <div ref={mentorDrop}>
-          <div className="font-bold">Mentors</div>
+          <div className="font-bold">Mentors ({mentors.length})</div>
           <div className="flex flex-wrap">
             { mentors.map( (p) => (
               <PersonView key={"mentor"+p.uniqueId} person={p} team={team} onMoved={()=>onMentorMoved(p)}/>
@@ -113,7 +113,7 @@ const TeamView = ( { team, deleteMe }: TeamProps ) => {
           </div>
         </div>
         <div ref={menteeDrop}>
-          <div className="font-bold">Mentees</div>
+          <div className="font-bold">Mentees ({mentees.length})</div>
           <div className="flex flex-wrap">
             { mentees.map( (p, index) => (
               <PersonView key={"mentee"+p.uniqueId} person={p} team={team} onMoved={()=>onMenteeMoved(p)}/>

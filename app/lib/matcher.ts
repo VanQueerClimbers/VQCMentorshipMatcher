@@ -4,7 +4,6 @@ import { cloneDeep } from "lodash";
 export function buildTeams(group: Group): Team[] {
   let mentors = cloneDeep(group.mentors);
   let mentees = cloneDeep(group.mentees);
-
   let teams = makeTeamsFromMentors(mentors);
 
   assignMenteesToTeams(mentees, teams);
@@ -106,14 +105,14 @@ function assignMenteesToTeams(mentees: Person[], teams: Team[]) {
 
 
 function sortMentees(mentees: Person[]): Person[] {
-  let menteeOrderScore = (mentor: Person): number => {
+  let menteeOrderScore = (mentee: Person): number => {
     let pickFactor = Math.min(
-      mentor.climbingStyles.length,
-      mentor.commutableGyms.length,
-      mentor.availability.length
+      mentee.climbingStyles.length,
+      mentee.commutableGyms.length,
+      mentee.availability.length
     );
 
-    return pickFactor * 1000;
+    return (3-mentee.groupSize) * 10000 + pickFactor * 1000 ;
   };
 
   return mentees.sort((a,b) => {
