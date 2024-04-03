@@ -248,6 +248,47 @@ describe("Models", () => {
       expect(team.compatible(p2)).toBeFalsy();
       expect(team.compatible(p3)).toBeFalsy();
     })
+
+    it("compatibility handles skill hierarchy", () => {
+      let m1 = new Mentor("name", "email2", undefined, ["anovice", "bbeginner", "cintermediate", "dadvanced"], ["1"], undefined, ["."], 3, undefined, CoMentorStyle.EITHER);
+      let team = new Team([], [m1]);
+
+      let p1 = new Person("p1", "e", undefined, ["anovice"], ["1"], CarpoolStyle.SOLO, ["."]);
+      expect(team.compatible(p1)).toBeTruthy();
+      p1.climbingStyles = ["abeginner"];
+      expect(team.compatible(p1)).toBeFalsy();
+      p1.climbingStyles = ["aintermediate"];
+      expect(team.compatible(p1)).toBeFalsy();
+      p1.climbingStyles = ["aadvanced"];
+      expect(team.compatible(p1)).toBeFalsy();
+
+      p1.climbingStyles = ["bnovice"];
+      expect(team.compatible(p1)).toBeTruthy();
+      p1.climbingStyles = ["bbeginner"];
+      expect(team.compatible(p1)).toBeTruthy();
+      p1.climbingStyles = ["bintermediate"];
+      expect(team.compatible(p1)).toBeFalsy();
+      p1.climbingStyles = ["badvanced"];
+      expect(team.compatible(p1)).toBeFalsy();
+
+      p1.climbingStyles = ["cnovice"];
+      expect(team.compatible(p1)).toBeTruthy();
+      p1.climbingStyles = ["cbeginner"];
+      expect(team.compatible(p1)).toBeTruthy();
+      p1.climbingStyles = ["cintermediate"];
+      expect(team.compatible(p1)).toBeTruthy();
+      p1.climbingStyles = ["cadvanced"];
+      expect(team.compatible(p1)).toBeFalsy();
+
+      p1.climbingStyles = ["dnovice"];
+      expect(team.compatible(p1)).toBeTruthy();
+      p1.climbingStyles = ["dbeginner"];
+      expect(team.compatible(p1)).toBeTruthy();
+      p1.climbingStyles = ["dintermediate"];
+      expect(team.compatible(p1)).toBeTruthy();
+      p1.climbingStyles = ["dadvanced"];
+      expect(team.compatible(p1)).toBeTruthy();
+    })
   })
 
 })

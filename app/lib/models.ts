@@ -12,6 +12,8 @@ export enum CoMentorStyle {
   EITHER = "either",
 }
 
+const SKILL_HIERARCHY = ["advanced", "intermediate", "beginner", "novice"];
+
 export class OtherResponse {
   constructor(public question: string, public answer: string) {}
 }
@@ -43,10 +45,28 @@ export class Person {
     return this.carpoolStyle == CarpoolStyle.SOLO;
   }
 
+  styles(): string[] {
+    let styles: string[] = [];
+
+
+    this.climbingStyles.forEach((s) => {
+      styles.push(s);
+      let matched = "";
+      SKILL_HIERARCHY.forEach((level) => {
+        if (matched != "") {
+          styles.push(s.replace(matched, level));
+        } else if (s.includes(level)) {
+          matched = level;
+        }
+      });
+    });
+    return styles;
+  }
+
   compatible(person: Person): boolean {
     const matchingGyms = findMatching(this.commutableGyms, person.commutableGyms).length > 0;
     const bothSolo = person.isSolo() && this.isSolo();
-    const matchingStyles = findMatching(this.climbingStyles, person.climbingStyles).length > 0;
+    const matchingStyles = findMatching(this.styles(), person.climbingStyles).length > 0;
     const matchingAvail = findMatching(this.availability, person.availability).length > 0;
     const differentEmail = this.email != person.email;
 
@@ -90,11 +110,14 @@ export class Mentor extends Person {
   compatible(person: Person): boolean {
     const personCompatible = super.compatible(person);
     if (person instanceof Mentor) {
-      const soloCompatible = !this.isSoloMentor() && !(person as Mentor).isSoloMentor();
-      const groupSizeCompatible = this.groupSize > 1 && person.groupSize > 1;
+      const soloCompatible = !this.isSoloMentor() && !(person as
+        Mentor).isSoloMentor();
+      const groupSizeCompatible = this.groupSize > 1 && person.groupSize >
+        1;
       return personCompatible && soloCompatible && groupSizeCompatible;
     } else return personCompatible;
   }
+
 }
 
 
@@ -125,7 +148,10 @@ export class Team extends Group {
   styles(): string[] {
     let lists: string[][] = [];
 
-    this.people().forEach((m) => {
+    this.mentors.forEach((m) => {
+      lists.push(m.styles());
+    });
+    this.mentees.forEach((m) => {
       lists.push(m.climbingStyles);
     });
 
