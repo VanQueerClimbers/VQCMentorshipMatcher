@@ -24,6 +24,37 @@ export default function Page() {
     setLoading(false);
   }
 
+  const exportCSV = () => {
+    let csvString = "GroupNumber,Role,Name,Pronouns,Email,GroupStyles,GroupGyms,GroupAvailability\n"
+    teams.forEach((team, index) => {
+      const groupNumber = index+1;
+      const gyms = "\"" + team.commutableGyms().join(",") + "\"";
+      const styles = "\"" + team.styles().join(",") + "\"";
+      const availability = "\"" + team.availability().join(",") + "\"";
+      team.mentors.forEach((mentor) => {
+        const name = "\"" + mentor.name + "\"";
+        const pronouns = "\"" + mentor.pronouns + "\"";
+        const email = "\""+mentor.email +"\"";
+        csvString += `${groupNumber},Mentor,${name},${pronouns},${email},${styles},${gyms},${availability}\n`
+      });
+      team.mentees.forEach((mentor) => {
+        const name = "\"" + mentor.name + "\"";
+        const pronouns = "\"" + mentor.pronouns + "\"";
+        const email = "\""+mentor.email +"\"";
+        csvString += `${groupNumber},Mentee,${name},${pronouns},${email},${styles},${gyms},${availability}\n`
+      });
+    });
+
+    const blob = new Blob([csvString], { type: "text/csv" });
+    const downloadLink = document.createElement("a");
+    downloadLink.href = URL.createObjectURL(blob);
+    downloadLink.download = "VQCGroups.csv"
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+
+  };
+
   const saveState = () => {
     const jsonString = JSON.stringify(teams, null, 2);
     const blob = new Blob([jsonString], { type: "application/json" });
@@ -71,7 +102,8 @@ export default function Page() {
       <MenuBar
         submitCallback={csvDataReceived}
         loadCallback={loadState}
-        saveCallback={saveState}/>
+        saveCallback={saveState}
+        exportCallback={exportCSV}/>
       <div className="h-screen w-screen">
         { loading ? (
           <p className="text-white text-center">Loading...</p>

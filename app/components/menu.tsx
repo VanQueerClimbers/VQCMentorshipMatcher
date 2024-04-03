@@ -5,9 +5,10 @@ interface MenuProps {
   submitCallback: (mentee: string, mentor: string) => void;
   loadCallback: (data: string) => void;
   saveCallback: () => void;
+  exportCallback: () => void;
 }
 
-const MenuBar = ( { submitCallback, loadCallback, saveCallback } : MenuProps ) => {
+const MenuBar = ( { submitCallback, loadCallback, saveCallback, exportCallback } : MenuProps ) => {
   const loadInputRef = useRef<HTMLInputElement | null>(null);
   const [mentorData, setMentorData] = useState("");
   const [menteeData, setMenteeData] = useState("");
@@ -80,6 +81,11 @@ const MenuBar = ( { submitCallback, loadCallback, saveCallback } : MenuProps ) =
         className="flex-none bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-2"
         onClick={loadItem}>
         Load
+      </button>
+      <button
+        className="flex-none bg-green-500 hover:bg-green-600 text-white py-1 px-2"
+        onClick={exportCallback}>
+        Export
       </button>
       <form className="flex flex-auto">
         <div className="flex-auto flex py-1 px-2">
