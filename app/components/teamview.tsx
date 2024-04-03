@@ -170,6 +170,10 @@ const TeamView = ( { team, deleteMe }: TeamProps ) => {
         onClose={closeTeamDetails}
         >
         <div className="flex flex-wrap p-4">
+          <h3 className="flex-none font-bold mr-2">Members:</h3>
+          <p className="flex-auto">{ team.people().map(p => p.name).join(", ") }</p>
+        </div>
+        <div className="flex flex-wrap p-4">
           <h3 className="flex-none font-bold mr-2">Emails:</h3>
           <p className="flex-auto">{ team.people().map(p => p.email).join(", ") }</p>
         </div>
